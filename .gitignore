@@ -16,12 +16,15 @@ dist
 *.ist
 *.log
 *.out
+*.synctex.gz
+*.sublime-workspace
 *.thm
 *.toc
 *.lof
 *.lot
 *.loe
 *.vrb
+*.xdv
 *.hd
 *.fdb_latexmk
 *.fls
@@ -31,3 +34,4 @@ thuthesis.cfg
 thuthesis.pdf
 main.pdf
 shuji.pdf
+ppt

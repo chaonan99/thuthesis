@@ -1,0 +1,39 @@
+{
+    "folders":
+    [
+        {
+            "file_exclude_patterns":
+            [
+                ".Rhistory",
+                "*.html",
+                "*.aux",
+                "*.pdf",
+                "*.out",
+                "*.synctex*",
+                "*.toc",
+                "*.log",
+                "*.bbl",
+                "*.blg",
+                "*.loe",
+                "*.lof",
+                "*.lot",
+                "*.xdv",
+                "*.fls",
+                "*.fdb_latexmk",
+                "*.glo",
+                "*.hd",
+                "*.dtx",
+                // "*.bst",
+                "*.gls",
+                // "*.cfg",
+                "*.ins",
+                "*.js",
+                "*.sty",
+                // "*.cls",
+                "*.thm",
+                "latexmkrc",
+            ],
+            "path": "."
+        }
+    ]
+}
