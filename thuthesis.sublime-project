@@ -35,5 +35,10 @@
             ],
             "path": "."
         }
-    ]
+    ],
+    "settings":
+    {
+        "texpath":["$PATH;.\\ref"],
+        "TEXroot": "main.tex"
+    }
 }
