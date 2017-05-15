@@ -49,7 +49,7 @@
     \end{axis}
     \end{tikzpicture}
   \end{minipage}
-  \caption{2006-2015全国道路交通事故数(左)与交通事故死亡人数(右)统计图}
+  \caption{2006-2015年全国道路交通事故总数(左)与交通事故死亡人数(右)统计图}
   \caption*{来源：国家统计局 \url{http://data.stats.gov.cn/easyquery.htm?cn=C01&zb=A0S0D01&sj=2015}}
   \label{fig:traffic}
   \end{figure}
@@ -133,18 +133,18 @@
 
   \subsection{单智能车决策问题}
     \label{sec:single}
-    本节讨论关于智能车决策控制的具体算法，主要讨论单个智能车的决策控制方法。其中\ref{sec:hierarchy}节给出了无人车决策问题的分层，\ref{sec:behavior}和\ref{sec:def:trajectory}节分别讨论了与本课题相关的行为决策和轨迹规划相关算法。
+    本节讨论关于智能车决策控制的具体算法，主要讨论单个智能车的决策控制方法。其中\ref{sec:hierarchy}节给出了无人车决策问题的分层，\ref{sec:behavior}和\ref{sec:trajectory}节分别讨论了与本课题相关的行为决策和轨迹规划相关算法。
 
     \subsubsection{无人车决策层次}
     \label{sec:hierarchy}
       无人车的控制系统，本质上是一个自动决策系统，该系统能够从传感器获取信息流，并结合对道路拓扑、交通规则、车辆运动学、传感器模型的先验知识，决定能够控制汽车运动的输出量。研究者普遍将无人车的决策问题分解为不同的层次，解决每个层面的控制问题。该问题可以分解为以下四层：路径规划层、行为决策层、动作决策层和车辆控制层\cite{paden2016survey}，如图\ref{fig:decision}。
 
-      \begin{figure}[htbp]
-      \centering
-      \includegraphics[width=9cm]{decision.png}
-      \caption{无人车决策层次\cite{paden2016survey}}
-      \label{fig:decision}
-      \end{figure}
+      % \begin{figure}[htbp]
+      % \centering
+      % \includegraphics[width=9cm]{decision.png}
+      % \caption{无人车决策层次\cite{paden2016survey}}
+      % \label{fig:decision}
+      % \end{figure}
 
       \paragraph{路径规划层} 这是无人车决策的最上层问题。通过将道路表示为有向网络，路径规划问题本质上就变成了一个最小费用流问题，可以采用 Dijkstra算法\cite{Dijkstra1959A}，$A^*$启发式搜索\cite{Nilsson1969A}等。在路径规划的研究领域，目前已经出现了一系列算法，能够在经过一次预处理过后，在大陆规模的路网中以微秒量级输出最佳路径\cite{Goldberg2003Computing,Geisberger2012Exact}。
 

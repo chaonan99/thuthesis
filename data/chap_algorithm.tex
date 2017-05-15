@@ -50,7 +50,7 @@ s_i(t)=p_k(t)-p_i(t)\geq \delta, \ \forall t\in [t_i^0, t_i^\mathrm{f}],
 其中$k$表示与$i$在同一车道的前一辆车的编号。上式涵盖了控制区、交汇区不发生同车道追尾的约束条件。
 
 车辆仅在交汇区可能与对路车辆发生横向碰撞。给出如下定义：
-\begin{definition}
+\begin{definition}[可能碰撞集]
 对所有$i\in \mathcal{N}(t)$，定义第 $i$辆车的{\heiti 可能碰撞集} $\Gamma_i$为可能发生横向碰撞的$i$车位置构成的集合，即
 \begin{equation}
 \Gamma_i\triangleq \{p_i(t)\in[L,L+S],\  \forall t\in [t_i^\mathrm{m},t_i^\mathrm{f}]\}.
@@ -120,8 +120,8 @@ t_i^\mathrm{m}=t_{i-1}^\mathrm{m} + \frac{r}{v_\mathrm{d}}
 \label{eq:two_item_obj}
 \end{equation}
 其中$w_1$，$w_2$为调整两项权重的比例系数，$t_i^\mathrm{m}(u_{(1:i)}(t))$表示$i$车的$t_i^\mathrm{m}$可能与之前所有车的控制量输入都有关。$\mathcal{R}_i$定义如下：
-\begin{definition}
-对每辆车$i$，定义该车的{\heiti 控制区间}$\mathcal{R}_i$为，
+\begin{definition}[控制区间]
+对每辆车$i$，定义该车的{\heiti 控制区间} $\mathcal{R}_i$为，
 \begin{equation}
 \begin{gathered}
 \mathcal{R}_i\triangleq\{u_i(t)\in[u_{\min}, u_{\max}]\ |\ p_i(t)\leq p_k(t)-\delta, v_i(t)\in[v_{\min}, v_{\max}],\\
@@ -134,7 +134,7 @@ t_i^\mathrm{m}=t_{i-1}^\mathrm{m} + \frac{r}{v_\mathrm{d}}
 
 式\ref{eq:two_item_obj}的第一项表示由控制量输入造成的损失，$C_i(u_i(t))$为控制量输入$u_i(t)$的某种函数。第二项为前后车进入交汇区时间差之和，该值越小，交汇路口吞吐量就越大。对于本文的优化问题，假设所有车辆均按照式\ref{eq:t_case1}，\ref{eq:t_case2}（或\ref{eq:t_case2r}）确定的时间下限通行，则可以略去目标函数式\ref{eq:two_item_obj}中的时间相关项，保留控制量相关项。选取目标为最小化控制量输入的平方\cite{Malikopoulos2016A,Rios2016Automated}，即
 \begin{equation}
-J(\mathbf{u})=\frac12\int_{t_i^0}^{t_i^\mathrm{m}}u_i^2\mathrm{d}t
+J(\bm{u})=\frac12\int_{t_i^0}^{t_i^\mathrm{m}}u_i^2\mathrm{d}t
 \label{eq:one_item_obj}
 \end{equation}
-其中$\mathbf{u}$为所有车控制量输入函数构成的向量。
+其中$\bm{u}$为所有车控制量输入函数构成的向量。

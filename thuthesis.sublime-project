@@ -39,6 +39,17 @@
     "settings":
     {
         "texpath":["$PATH;.\\ref"],
-        "TEXroot": "main.tex"
+        "TEXroot": "main.tex",
+        "preview_math_template_packages": [
+        "\\usepackage{amsmath}",
+        "\\usepackage{siunitx}",
+        "\\usepackage{amsfonts}",
+        "\\usepackage{mathtools}",
+        "\\usepackage{amssymb}",
+        "\\usepackage{upgreek}",
+        "\\usepackage{bm}",
+        "\\IfFileExists{latexsym.sty}{\\usepackage{latexsym}}{}",
+        "\\IfFileExists{mathtools.sty}{\\usepackage{mathtools}}{}"
+        ],
     }
 }

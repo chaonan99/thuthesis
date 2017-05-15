@@ -1,7 +1,129 @@
 \chapter{车道汇合群决策模型求解}
 \label{cha:solve}
 
-\section{泛函分析原理}
+在上一章中已经给出了模型的目标函数，并且提到需要对每辆车求解一个控制量输入$u_i(t)$，使得$J(\mathbf{u})$达到最小。注意到$u_t(t)$实际上是关于时间$t$的函数，$J(\mathbf{u})$实际上是函数的函数，数学上称为泛函。求泛函的极值需要用到变分法的相关知识。本章先对泛函与变分法进行简要说明，之后运用该方法求解不同情况下泛函的极值，得到决策控制方法。
 
+\section{泛函与变分法}
+泛函的概念最早在变分法中出现，并广泛应用于最优控制的相关问题中。
 
-\section{哈密尔顿分析}
+\subsection{泛函与泛函的变分}
+抽象空间理论将泛函定义为向量空间上的实值函数，而在最优控制中往往限定为函数集上的实值函数。定义如下，
+\begin{definition}[泛函]
+函数集$\mathcal{U}(x)$，到实数集$\mathbb{R}$的映射$J: \mathcal{U}\rightarrow \mathbb{R}$称为函数集$\mathcal{U}$上的{\heiti 泛函}，即，
+\begin{equation}
+J=J[u(x)], \ u(x)\in \mathcal{U}(x).
+\end{equation}
+\end{definition}
+泛函的变分与函数的微分类似。首先需要定义函数的变分，定义如下，
+\begin{definition}[函数的变分]
+设$u(x), u_0(x) \in \mathcal{U}(x)$，{\heiti 函数的变分}定义为
+\begin{equation}
+\delta u(x)=u(x) - u_0(x)
+\end{equation}
+\end{definition}
+由以上定义知，函数的变分仍是$x$的函数。另外根据泛函定义，函数集$\mathcal{U}(x)$应是向量空间，对加法和数乘封闭，因此$\delta u(x)\in \mathcal{U}(x)$。
+之后定义泛函的连续性如下，
+\begin{definition}[泛函的连续性]
+$\forall \varepsilon > 0$，$\exists \delta > 0$，对于$\forall u(x), d(u,u_0)<\delta$有
+\begin{equation}
+\Delta J[u(x)]=J[u(x)+\delta u(x)]-J[u(x)] < \delta
+\end{equation}
+其中$d(u,u_0)$为函数空间$\mathcal{U}$上定义的某种范数，则称泛函$J[u(x)]$在范数$d$下，在$u_0(x)$连续。
+\end{definition}
+泛函的变分定义如下，
+\begin{definition}[泛函的变分]
+泛函的增量若能表示为
+\begin{equation}
+\Delta J[u(x)]=L[u(x),\delta u(x)] + \gamma[u(x), \delta u(x)],
+\end{equation}
+其中$L[u(x),\delta u(x)]$是$\delta u(x)$的线性连续泛函，$\gamma[u(x), \delta u(x)]$是$\delta u(x)$的高阶无穷小，则称$L[u(x),\delta u(x)]$为泛函$J[u(x)]$的变分，记为
+\begin{equation}
+\delta J = L[u(x),\delta u(x)]
+\end{equation}
+\end{definition}
+关于线性连续泛函的概念，以及泛函变分更严谨的定义，参见泛函分析的教材\cite{PETERD2007Functional}。
+
+\subsection{变分法}
+求泛函极值的方法称为变分法。泛函极值的定义与函数极值类似。下面不加证明地给出如下定理：
+\begin{theorem}
+若泛函$J[u(x)]$在$u_0(x)$有极值，则
+\begin{equation}
+\delta J[u_0(x)]=0
+\end{equation}
+\end{theorem}
+注意，上述定理只是泛函取极值的必要条件。至于是否存在极值，是极大还是极小值，需要根据实际问题的性质确定。
+
+变分学中有如下三类基本问题。三者区别在于泛函形式不同，而目标都是求泛函极小值。
+\paragraph{拉格朗日（Lagrange）问题} 泛函形式为
+\begin{equation}
+J = \int_{t_0}^{t_\mathrm{f}}F(t,x,\dot{x})\mathrm{d}t,
+\end{equation}
+其中$t_0$为初始时间，$t_f$为终端时间。
+\paragraph{梅耶（Mayer）问题} 泛函形式为
+\begin{equation}
+J=\theta[x_\mathrm{f},t_\mathrm{f}].
+\end{equation}
+该泛函是终端时间$t_\mathrm{f}$和终端函数$x_\mathrm{f}=x(t_mathrm{f})$的函数。
+\paragraph{波尔查（Bolza）问题} 泛函形式为
+\begin{equation}
+J=\theta[x_\mathrm{f},t_\mathrm{f}]+\int_{t_0}^{t_\mathrm{f}}F(t,x,\dot{x})\mathrm{d}t.
+\end{equation}
+可见，前两者是后者的特殊形式。
+
+\subsection{最优控制的必要条件}
+最优控制问题常写作如下形式的波尔查问题
+\begin{equation}
+J(\bm{u})=\theta[t_\mathrm{f},\bm{x}_\mathrm{f}]+\int_{t_0}^{t_\mathrm{f}}L[\bm{x}(t),\bm{u}(t),t]\mathrm{d}t,
+\end{equation}
+其状态方程和初始状态为
+\begin{equation}
+\dot{\bm{x}}=\bm{f}[\bm{x}(t),\bm{u}(t),t], \quad \bm{x}(t_0)=\bm{x}_0.
+\end{equation}
+定义{\heiti 哈密顿函数}为
+\begin{equation}
+H(\bm{x},\bm{u},\bm{\lambda},t)=L(\bm{x},\bm{u},t)+\bm{\lambda}^\mathrm{T}\bm{f}(\bm{x},\bm{u},t),
+\end{equation}
+
+下面针对上述波尔查问题的形式，给出几种情况下的最优控制必要条件。若最优控制的损失函数退化为拉格朗日或梅耶问题的形式，其必要条件也可以相应得出。
+\\
+\\
+\begin{enumerate}
+\item {\heiti 终端自由，$t_\mathrm{f}$给定的情形}
+\\ 最优控制的必要条件为
+\begin{gather}
+\frac{\partial H}{\partial\bm{u}}=0,\label{eq:nc:control}\\
+\dot{\bm{u}}=-\frac{\partial H}{\partial\bm{x}},\label{eq:nc:company}\\
+\bm{\lambda}(t_\mathrm{f})=\left. \frac{\partial \theta}{\partial \bm{x}}\right|_{t_\mathrm{f}},\\
+\dot{\bm{x}}=\bm{f}(\bm{x},\bm{u},t),\\
+\bm{x}(t_0)=\bm{x}_0.\label{eq:nc:last}
+\end{gather}
+其中式\ref{eq:nc:control}也被称作{\heiti 控制方程}，式\ref{eq:nc:company}也被称作{\heiti 伴随方程}。若退化为拉格朗日问题，则$\theta[t_\mathrm{f},\bm{x}_\mathrm{f}]\equiv 0$，式\ref{eq:nc:company}变为
+\begin{equation}
+\bm{\lambda}(t_\mathrm{f})=0.
+\end{equation}
+
+\item {\heiti 终端受限，$t_\mathrm{f}$给定的情形}
+\\设终端约束条件为
+\begin{equation}
+\bm{g}(\bm{x}_\mathrm{f},t_\mathrm{f})=0,
+\end{equation}
+最优控制的必要条件为
+\begin{gather}
+\frac{\partial H}{\partial\bm{u}}=0,\label{eq:cc:control}\\
+\dot{\bm{u}}=-\frac{\partial H}{\partial\bm{x}},\label{eq:cc:company}\\
+\bm{\lambda}(t_\mathrm{f})=\left. \frac{\partial \theta}{\partial \bm{x}}\right|_{t_\mathrm{f}},\\
+\dot{\bm{x}}=\bm{f}(\bm{x},\bm{u},t),\\
+\bm{x}(t_0)=\bm{x}_0.\label{eq:cc:last}
+\end{gather}
+
+\item {\heiti 终端受限，$t_\mathrm{f}$未给定的情形}
+\\最优控制的必要条件为
+\begin{gather}
+\frac{\partial H}{\partial\bm{u}}=0,\label{eq:cc:control}\\
+\dot{\bm{u}}=-\frac{\partial H}{\partial\bm{x}},\label{eq:cc:company}\\
+\bm{\lambda}(t_\mathrm{f})=\left. \frac{\partial \theta}{\partial \bm{x}}\right|_{t_\mathrm{f}},\\
+\dot{\bm{x}}=\bm{f}(\bm{x},\bm{u},t),\\
+\bm{x}(t_0)=\bm{x}_0.\label{eq:cc:last}
+\end{gather}
+
+\end{enumerate}
