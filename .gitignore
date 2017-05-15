@@ -31,3 +31,6 @@ thuthesis.cfg
 thuthesis.pdf
 main.pdf
 shuji.pdf
+*.synctex.gz
+*.xdv
+*.sublime-workspace
