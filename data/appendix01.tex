@@ -1,183 +1,111 @@
-% \chapter{外文资料原文}
-% \label{cha:engorg}
+\chapter{外文资料原文}
+\label{cha:engorg}
 
-% \title{The title of the English paper}
+\title{A Survey of Motion Planning and Control Techniques for Self-driving Urban Vehicles}
 
-% \textbf{Abstract:} As one of the most widely used techniques in operations
-% research, \emph{ mathematical programming} is defined as a means of maximizing a
-% quantity known as \emph{bjective function}, subject to a set of constraints
-% represented by equations and inequalities. Some known subtopics of mathematical
-% programming are linear programming, nonlinear programming, multiobjective
-% programming, goal programming, dynamic programming, and multilevel
-% programming$^{[1]}$.
+\textbf{Abstract:} Self-driving vehicles are a maturing technology with the potential to reshape mobility by enhancing the safety, accessibility, efficiency, and convenience of automotive transportation. Safety-critical tasks that must be executed by a self-driving vehicle include planning of motions through a dynamic environment shared with other vehicles and pedestrians, and their robust executions via feedback control. The objective of this paper is to survey the current state of the art on planning and control algorithms with particular regard to the urban setting. A selection of proposed techniques is reviewed along with a discussion of their effectiveness. The surveyed approaches differ in the vehicle mobility model used, in assumptions on the structure of the environment, and in computational requirements. The side-by-side comparison presented in this survey helps to gain insight into the strengths and limitations of the reviewed approaches and assists with system level design choices.
 
-% It is impossible to cover in a single chapter every concept of mathematical
-% programming. This chapter introduces only the basic concepts and techniques of
-% mathematical programming such that readers gain an understanding of them
-% throughout the book$^{[2,3]}$.
+\section{Introduction}
+The last three decades have seen steadily increasing research efforts, both in academia and in industry, towards developing driverless vehicle technology. These developments have been fueled by recent advances in sensing and computing technology together with the potential transformative impact on automotive transportation and the perceived societal benefit: In 2014 there were 32,675 traffic related fatalities, 2.3 million injuries, and 6.1 million reported collisions [1]. Of these, an estimated 94\% are attributed to driver error with 31\% involving legally intoxicated drivers, and 10\% from distracted drivers [2]. Autonomous vehicles have the potential to dramatically reduce the contribution of driver error and negligence as the cause of vehicle collisions. They will also provide a means of personal mobility to people who are unable to drive due to physical or visual disability. Finally, for the 86\% of the US work force that commutes by car, on average 25 minutes (one way) each day [3], autonomous vehicles would facilitate more productive use of the transit time, or simply reduce the measurable ill effects of driving stress [4]. Considering the potential impacts of this new technology, it is not surprising that self-driving cars have had a long history. The idea has been around as early as in the 1920s, but it was not until the 1980s that driverless cars seemed like a real possibility. Pioneering work led by Ernst Dickmanns (e.g., [5]) in the 1980s paved the way for the development of autonomous vehicles. At that time a massive research effort, the PROMETHEUS project, was funded to develop an autonomous vehicle. A notable demonstration in 1994 resulting from the work was a 1,600 km drive by the VaMP driverless car, of which 95\% was driven autonomously [6]. At a similar time, the CMU NAVLAB was making advances in the area and in 1995 demonstrated further progress with a 5,000 km drive across the US of which 98\% was driven autonomously [7].
 
+The next major milestone in driverless vehicle technology was the first DARPA Grand Challenge in 2004. The objective was for a driverless car to navigate a 150-mile off-road course as quickly as possible. This was a major challenge in comparison to previous demonstrations in that there was to be no human intervention during the race. Although prior works demonstrated nearly autonomous driving, eliminating human intervention at critical moments proved to be a major challenge. None of the 15 vehicles entered into the event completed the race. In 2005 a similar event was held; this time 5 of 23 teams reached the finish line [8]. Later, in 2007, the DARPA Urban Challenge was held, in which vehicles were required to drive autonomously in a simulated urban setting. Six teams finished the event demonstrating that fully autonomous urban driving is possible [9]. Numerous events and major autonomous vehicle system tests have been carried out since the DARPA challenges. Notable examples include the Intelligent Vehicle Future Challenges from 2009 to 2013 [10], Hyundai Autonomous Challenge in 2010 [11], the VisLab Intercontinental Autonomous Challenge in 2010 [12], the Public Road Urban Driverless- Car Test in 2013 [13], and the autonomous drive of the Bertha-Benz historic route [14]. Simultaneously, research has continued at an accelerated pace in both the academic setting as well as in industry. The Google self-driving car [15] and Tesla’s Autopilot system [16] are two examples of commercial efforts receiving considerable media attention. The extent to which a car is automated can vary from fully human operated to fully autonomous. The SAE J3016 standard [17] introduces a scale from 0 to 5 for grading vehicle automation. In this standard, the level 0 represents a vehicle where all driving tasks are the responsibility of a human driver. Level 1 includes basic driving assistance such as adaptive cruise control, anti-lock braking systems and electronic stability control [18]. Level 2 includes advanced assistance such as hazard-minimizing longitudinal/lateral control [19] or emergency braking [20], [21], often based upon set-based formal control theoretic methods to compute ‘worst-case’ sets of provably collision free (safe) states [22]–[24]. At level 3 the system monitors the environment and can drive with full autonomy under certain conditions, but the human operator is still required to take control if the driving task leaves the autonomous system’s operational envelope. A vehicle with level 4 automation is capable of fully autonomous driving in certain conditions and will safely control the vehicle if the operator fails to take control upon request to intervene. Level 5 systems are fully autonomous in all driving modes. The availability of on-board computation and wireless communication technology allows cars to exchange information with other cars and with the road infrastructure giving rise to a closely related area of research on connected intelligent vehicles [25]. This research aims to improve the safety and performance of road transport through information sharing and coordination between individual vehicles. For instance, connected vehicle technology has a potential to improve throughput at intersections [26] or prevent formation of traffic shock waves [27].
 
-% \section{Single-Objective Programming}
-% The general form of single-objective programming (SOP) is written
-% as follows,
-% \begin{equation}\tag*{(123)} % 如果附录中的公式不想让它出现在公式索引中，那就请
-%                              % 用 \tag*{xxxx}
-% \left\{\begin{array}{l}
-% \max \,\,f(x)\\[0.1 cm]
-% \mbox{subject to:} \\ [0.1 cm]
-% \qquad g_j(x)\le 0,\quad j=1,2,\cdots,p
-% \end{array}\right.
-% \end{equation}
-% which maximizes a real-valued function $f$ of
-% $x=(x_1,x_2,\cdots,x_n)$ subject to a set of constraints.
+To limit the scope of this survey, we focus on aspects of decision making, motion planning, and control for self-driving cars, in particular, for systems falling into the automation level of 3 and above. For the same reason, the broad field of perception for autonomous driving is omitted and instead the reader is referred to a number of comprehensive surveys and major recent contributions on the subject [28]–[31].
 
-% \newtheorem{mpdef}{Definition}[chapter]
-% \begin{mpdef}
-% In SOP, we call $x$ a decision vector, and
-% $x_1,x_2,\cdots,x_n$ decision variables. The function
-% $f$ is called the objective function. The set
-% \begin{equation}\tag*{(456)} % 这里同理，其它不再一一指定。
-% S=\left\{x\in\Re^n\bigm|g_j(x)\le 0,\,j=1,2,\cdots,p\right\}
-% \end{equation}
-% is called the feasible set. An element $x$ in $S$ is called a
-% feasible solution.
-% \end{mpdef}
+The decision making in contemporary autonomous driving systems is typically hierarchically structured into route planning, behavioral decision making, local motion planning and feedback control. The partitioning of these levels are, however, rather blurred with different variations of this scheme occurring in the literature. This paper provides a survey of proposed methods to address these core problems of autonomous driving. Particular emphasis is placed on methods for local motion planning and control.
 
-% \newtheorem{mpdefop}[mpdef]{Definition}
-% \begin{mpdefop}
-% A feasible solution $x^*$ is called the optimal
-% solution of SOP if and only if
-% \begin{equation}
-% f(x^*)\ge f(x)
-% \end{equation}
-% for any feasible solution $x$.
-% \end{mpdefop}
+The remainder of the paper is structured as follows: In Section II, a high level overview of the hierarchy of decision making processes and some of the methods for their design are presented. Section III reviews models used to approximate the mobility of cars in urban settings for the purposes of motion planning and feedback control. Section IV surveys the rich literature on motion planning and discusses its applicability for self-driving cars. Similarly, Section V discusses the problems of path and trajectory stabilization and specific feedback control methods for driverless cars. Lastly, Section VI concludes with remarks on the state of the art and potential areas for future research.
 
-% One of the outstanding contributions to mathematical programming was known as
-% the Kuhn-Tucker conditions\ref{eq:ktc}. In order to introduce them, let us give
-% some definitions. An inequality constraint $g_j(x)\le 0$ is said to be active at
-% a point $x^*$ if $g_j(x^*)=0$. A point $x^*$ satisfying $g_j(x^*)\le 0$ is said
-% to be regular if the gradient vectors $\nabla g_j(x)$ of all active constraints
-% are linearly independent.
+\section{Overview of the Decision-Makeing Hierarchy Used in Driverless Cars}
 
-% Let $x^*$ be a regular point of the constraints of SOP and assume that all the
-% functions $f(x)$ and $g_j(x),j=1,2,\cdots,p$ are differentiable. If $x^*$ is a
-% local optimal solution, then there exist Lagrange multipliers
-% $\lambda_j,j=1,2,\cdots,p$ such that the following Kuhn-Tucker conditions hold,
-% \begin{equation}
-% \label{eq:ktc}
-% \left\{\begin{array}{l}
-%     \nabla f(x^*)-\sum\limits_{j=1}^p\lambda_j\nabla g_j(x^*)=0\\[0.3cm]
-%     \lambda_jg_j(x^*)=0,\quad j=1,2,\cdots,p\\[0.2cm]
-%     \lambda_j\ge 0,\quad j=1,2,\cdots,p.
-% \end{array}\right.
-% \end{equation}
-% If all the functions $f(x)$ and $g_j(x),j=1,2,\cdots,p$ are convex and
-% differentiable, and the point $x^*$ satisfies the Kuhn-Tucker conditions
-% (\ref{eq:ktc}), then it has been proved that the point $x^*$ is a global optimal
-% solution of SOP.
+In this section we describe the decision making architecture of a typical self-driving car and comment on the responsibilities of each component. Driverless cars are essentially autonomous decision-making systems that process a stream of observations from on-board sensors such as radars, LIDARs, cameras, GPS/INS units, and odometry. These observations, together with prior knowledge about the road network, rules of the road, vehicle dynamics, and sensor models, are used to automatically select values for controlled variables governing the vehicle’s motion. Intelligent vehicle research aims at automating as much of the driving task as possible. The commonly adopted approach to this problem is to partition and organize perception and decision-making tasks into a hierarchical structure. The prior information and collected observation data are used by the perception system to provide an estimate of the state of the vehicle and its surrounding environment; the estimates are then used by the decisionmaking system to control the vehicle so that the driving objectives are accomplished.
 
-% \subsection{Linear Programming}
-% \label{sec:lp}
+The decision making system of a typical self-driving car is hierarchically decomposed into four components (cf. Figure II.1): At the highest level a route is planned through the road network. This is followed by a behavioral layer, which decides on a local driving task that progresses the car towards the destination and abides by rules of the road. A motion planning module then selects a continuous path through the environment to accomplish a local navigational task. A control system then reactively corrects errors in the execution of the planned motion. In the remainder of the section we discuss the responsibilities of each of these components in more detail.
 
-% If the functions $f(x),g_j(x),j=1,2,\cdots,p$ are all linear, then SOP is called
-% a {\em linear programming}.
+\subsection{Route Planning}
+At the highest level, a vehicle’s decision-making system must select a route through the road network from its current position to the requested destination. By representing the road network as a directed graph with edge weights corresponding to the cost of traversing a road segment, such a route can be formulated as the problem of finding a minimum-cost path on a road network graph. The graphs representing road networks can however contain millions of edges making classical shortest path algorithms such as Dijkstra [32] or A* [33] impractical. The problem of efficient route planning in transportation networks has attracted significant interest in the transportation science community leading to the invention of a family of algorithms that after a one-time pre-processing step return an optimal route on a continent-scale network in milliseconds [34], [35]. For a comprehensive survey and comparison of practical algorithms that can be used to efficiently plan routes for both human-driven and self-driving vehicles, see [36].
 
-% The feasible set of linear is always convex. A point $x$ is called an extreme
-% point of convex set $S$ if $x\in S$ and $x$ cannot be expressed as a convex
-% combination of two points in $S$. It has been shown that the optimal solution to
-% linear programming corresponds to an extreme point of its feasible set provided
-% that the feasible set $S$ is bounded. This fact is the basis of the {\em simplex
-%   algorithm} which was developed by Dantzig as a very efficient method for
-% solving linear programming.
-% \begin{table}[ht]
-% \centering
-%   \centering
-%   \caption*{Table~1\hskip1em This is an example for manually numbered table, which
-%     would not appear in the list of tables}
-%   \label{tab:badtabular2}
-%   \begin{tabular}[c]{|m{1.5cm}|c|c|c|c|c|c|}\hline
-%     \multicolumn{2}{|c|}{Network Topology} & \# of nodes &
-%     \multicolumn{3}{c|}{\# of clients} & Server \\\hline
-%     GT-ITM & Waxman Transit-Stub & 600 &
-%     \multirow{2}{2em}{2\%}&
-%     \multirow{2}{2em}{10\%}&
-%     \multirow{2}{2em}{50\%}&
-%     \multirow{2}{1.2in}{Max. Connectivity}\\\cline{1-3}
-%     \multicolumn{2}{|c|}{Inet-2.1} & 6000 & & & &\\\hline
-%     \multirow{2}{1.5cm}{Xue} & Rui  & Ni &\multicolumn{4}{c|}{\multirow{2}*{\thuthesis}}\\\cline{2-3}
-%     & \multicolumn{2}{c|}{ABCDEF} &\multicolumn{4}{c|}{} \\\hline
-% \end{tabular}
-% \end{table}
+\subsection{Behavioral Decision Making}
+After a route plan has been found, the autonomous vehicle must be able to navigate the selected route and interact with other traffic participants according to driving conventions and rules of the road. Given a sequence of road segments specifying the selected route, the behavioral layer is responsible for selecting an appropriate driving behavior at any point of time based on the perceived behavior of other traffic participants, road conditions, and signals from infrastructure. For example, when the vehicle is reaching the stop line before an intersection, the behavioral layer will command the vehicle to come to a stop, observe the behavior of other vehicles, bikes, and pedestrians at the intersection, and let the vehicle proceed once it is its turn to go. Driving manuals dictate qualitative actions for specific driving contexts. Since both driving contexts and the behaviors available in each context can be modeled as finite sets, a natural approach to automating this decision making is to model each behavior as a state in a finite state machine with transitions governed by the perceived driving context such as relative position with respect to the planned route and nearby vehicles. In fact, finite state machines coupled with different heuristics specific to considered driving scenarios were adopted as a mechanism for behavior control by most teams in the DARPA Urban Challenge [9].
 
-% Roughly speaking, the simplex algorithm examines only the extreme points of the
-% feasible set, rather than all feasible points. At first, the simplex algorithm
-% selects an extreme point as the initial point. The successive extreme point is
-% selected so as to improve the objective function value. The procedure is
-% repeated until no improvement in objective function value can be made. The last
-% extreme point is the optimal solution.
+Real-world driving, especially in an urban setting, is however characterized by uncertainty over the intentions of other traffic participants. The problem of intention prediction and estimation of future trajectories of other vehicles, bikes and pedestrians has also been studied. Among the proposed solution techniques are machine learning based techniques, e.g., Gaussian mixture models [37], Gaussian process regression [38], the learning techniques reportedly used in Google’s self-driving system for intention prediction [39], and modelbased approaches for directly estimating intentions from sensor measurements [40], [41].
 
-% \subsection{Nonlinear Programming}
+This uncertainty in the behavior of other traffic participants is commonly considered in the behavioral layer for decision making using probabilistic planning formalisms, such as Markov Decision Processes (MDPs) and their generalizations. For example, [42] formulates the behavioral decision-making problem in the MDP framework. Several works [43]–[46] model unobserved driving scenarios and pedestrian intentions explicitly using a partially-observable Markov decision process (POMDP) framework and propose specific approximate solution strategies.
 
-% If at least one of the functions $f(x),g_j(x),j=1,2,\cdots,p$ is nonlinear, then
-% SOP is called a {\em nonlinear programming}.
+\subsection{Motion Planning}
+When the behavioral layer decides on the driving behavior to be performed in the current context, which could be, e.g., cruise-in-lane, change-lane, or turn-right, the selected behavior has to be translated into a path or trajectory that can be tracked by the low-level feedback controller. The resulting path or trajectory must be dynamically feasible for the vehicle, comfortable for the passenger, and avoid collisions with obstacles detected by the on-board sensors. The task of finding such a path or trajectory is a responsibility of the motion planning system.
 
-% A large number of classical optimization methods have been developed to treat
-% special-structural nonlinear programming based on the mathematical theory
-% concerned with analyzing the structure of problems.
-% \begin{figure}[h]
-%   \centering
-%   \includegraphics{thu-lib-logo}
-%   \caption*{Figure~1\quad This is an example for manually numbered figure,
-%     which would not appear in the list of figures}
-%   \label{tab:badfigure2}
-% \end{figure}
+The task of motion planning for an autonomous vehicle corresponds to solving the standard motion planning problem as discussed in the robotics literature. Exact solutions to the motion planning problem are in most cases computationally intractable. Thus, numerical approximation methods are typically used in practice. Among the most popular numerical approaches are variational methods that pose the problem as non-linear optimization in a function space, graph-search approaches that construct graphical discretization of the vehicle’s state space and search for a shortest path using graph search methods, and incremental tree-based approaches that incrementally construct a tree of reachable states from the initial state of the vehicle and then select the best branch of such a tree. The motion planning methods relevant for autonomous driving are discussed in greater detail in Section IV.
 
-% Now we consider a nonlinear programming which is confronted solely with
-% maximizing a real-valued function with domain $\Re^n$.  Whether derivatives are
-% available or not, the usual strategy is first to select a point in $\Re^n$ which
-% is thought to be the most likely place where the maximum exists. If there is no
-% information available on which to base such a selection, a point is chosen at
-% random. From this first point an attempt is made to construct a sequence of
-% points, each of which yields an improved objective function value over its
-% predecessor. The next point to be added to the sequence is chosen by analyzing
-% the behavior of the function at the previous points. This construction continues
-% until some termination criterion is met. Methods based upon this strategy are
-% called {\em ascent methods}, which can be classified as {\em direct methods},
-% {\em gradient methods}, and {\em Hessian methods} according to the information
-% about the behavior of objective function $f$. Direct methods require only that
-% the function can be evaluated at each point. Gradient methods require the
-% evaluation of first derivatives of $f$. Hessian methods require the evaluation
-% of second derivatives. In fact, there is no superior method for all
-% problems. The efficiency of a method is very much dependent upon the objective
-% function.
+\subsection{Vehicle Control}
+In order to execute the reference path or trajectory from the motion planning system a feedback controller is used to select appropriate actuator inputs to carry out the planned motion and correct tracking errors. The tracking errors generated during the execution of a planned motion are due in part to the inaccuracies of the vehicle model. Thus, a great deal of emphasis is placed on the robustness and stability of the closed loop system.
 
-% \subsection{Integer Programming}
+Many effective feedback controllers have been proposed for executing the reference motions provided by the motion planning system. A survey of related techniques are discussed in detail in Section V.
 
-% {\em Integer programming} is a special mathematical programming in which all of
-% the variables are assumed to be only integer values. When there are not only
-% integer variables but also conventional continuous variables, we call it {\em
-%   mixed integer programming}. If all the variables are assumed either 0 or 1,
-% then the problem is termed a {\em zero-one programming}. Although integer
-% programming can be solved by an {\em exhaustive enumeration} theoretically, it
-% is impractical to solve realistically sized integer programming problems. The
-% most successful algorithm so far found to solve integer programming is called
-% the {\em branch-and-bound enumeration} developed by Balas (1965) and Dakin
-% (1965). The other technique to integer programming is the {\em cutting plane
-%   method} developed by Gomory (1959).
+\section{Modeling For Planning And Control}
+In this section we will survey the most commonly used models of mobility of car-like vehicles. Such models are widely used in control and motion planning algorithms to approximate a vehicle’s behavior in response to control actions in relevant operating conditions. A high-fidelity model may accurately reflect the response of the vehicle, but the added detail may complicate the planning and control problems. This presents a trade-off between the accuracy of the selected model and the difficulty of the decision problems. This section provides an overview of general modeling concepts and a survey of models used for motion planning and control.
 
-% \hfill\textit{Uncertain Programming\/}\quad(\textsl{BaoDing Liu, 2006.2})
+Modeling begins with the notion of the vehicle configuration, representing its pose or position in the world. For example, configuration can be expressed as the planar coordinate of a point on the car together with the car’s heading. This is a coordinate system for the configuration space of the car. This coordinate system describes planar rigid-body motions (represented by the Special Euclidean group in two dimensions, SE(2)) and is a commonly used configuration space [47]–[49]. Vehicle motion must then be planned and regulated to accomplish driving tasks and while respecting the constraints introduced by the selected model.
 
-% \section*{References}
-% \noindent{\itshape NOTE: These references are only for demonstration. They are
-%   not real citations in the original text.}
+\subsection{The Kinematic Single-Track Model}
+In the most basic model of practical use, the car consists of two wheels connected by a rigid link and is restricted to move in a plane [48]–[52]. It is assumed that the wheels do not slip at their contact point with the ground, but can rotate freely about their axes of rotation. The front wheel has an added degree of freedom where it is allowed to rotate about an axis normal to the plane of motion. This is to model steering. These two modeling features reflect the experience most passengers have where the car is unable to make lateral displacement without simultaneously moving forward. More formally, the limitation on maneuverability is referred to as a nonholonomic constraint [47], [53]. The nonholonomic constraint is expressed as a differential constraint on the motion of the car. This expression varies depending on the choice of coordinate system. Variations of this model have been referred to as the car-like robot, bicycle model, kinematic model, or single track model.
 
-% \begin{translationbib}
-% \item Donald E. Knuth. The \TeX book. Addison-Wesley, 1984. ISBN: 0-201-13448-9
-% \item Paul W. Abrahams, Karl Berry and Kathryn A. Hargreaves. \TeX\ for the
-%   Impatient. Addison-Wesley, 1990. ISBN: 0-201-51375-7
-% \item David Salomon. The advanced \TeX book.  New York : Springer, 1995. ISBN:0-387-94556-3
-% \end{translationbib}
+The following is a derivation of the differential constraint in several popular coordinate systems for the configuration. In reference to Figure \ref{fig:kinematics}, the vectors $p_r$ and $p_f$ denote the location of the rear and front wheels in a stationary or inertial coordinate system with basis vectors $(\hat{e}_x, \hat{e}_y, \hat{e}_z)$. The heading $\theta$ is an angle describing the direction that the vehicle is facing. This is defined as the angle between vectors $\hat{e}_x$ and $p_f-p_r$.
+
+The motion of the points $p_r$ and $p_f$ must be collinear with the wheel orientation to satisfy the no-slip assumption. Expressed as an equation, this constraint on the rear wheel is
+\begin{equation}
+(\dot{p}_r\cdot \hat{e}_y)\cos(\theta)-(\dot{p}_r\cdot \hat{e}_x)\sin(\theta)=0,
+\end{equation}
+and for the front wheel:
+\begin{equation}
+(\dot{p}_f\cdot \hat{e}_y)\cos(\theta+\delta)-(\dot{p}_f\cdot \hat{e}_x)\sin(\theta+\delta)=0.
+\end{equation}
+
+This expression is usually rewritten in terms of the componentwise motion of each point along the basis vectors. The motion of the rear wheel along the $\hat{e}_x$-direction is $x_r := p_r\cdot\hat{e}_x$. Similarly, for $\hat{e}_y$-direction, $y_r:=p_r\cdot \hat{e}_y$. The forward speed is $v_r:=\dot{p}_r\cdot(p_f-p_r)/\|(p_f-p_r)\|$, which is the magnitude of $\dot{p}_r$ with the correct sign to indicate forward or reverse driving. In terms of the scalar quantities $x_r$, $y_r$, and $\theta$, the differential constraint is
+\begin{align}
+\begin{split}
+\dot{x}_r&= v_r\cos(\theta),\\
+\dot{y}_r&= v_r\sin(\theta),\\
+\dot{\theta}&=\frac{v_r}{l}\tan(\delta).
+\end{split}
+\end{align}
+Alternatively, the differential constraint can be written in terms the motion of $p_f$,
+\begin{align}
+\begin{split}
+\dot{x}_f&= v_f\cos(\theta),\\
+\dot{y}_f&= v_f\sin(\theta),\\
+\dot{\theta}&=\frac{v_f}{l}\tan(\delta).
+\end{split}
+\label{eq:vf}
+\end{align}
+where the front wheel forward speed $v_f$ is now used. The front wheel speed, $v_f$ , is related to the rear wheel speed by
+\begin{equation}
+\frac{v_r}{v_f}=\cos(\delta).
+\end{equation}
+
+The planning and control problems for this model involve selecting the steering angle $\delta$ within the mechanical limits of the vehicle $\delta\in [\delta_{\min}, \delta_{\max}]$, and forward speed $v_r$ within an acceptable range, $v_r\in [v_{\min}, v_{\max}]$.
+
+A simplification that is sometimes utilized, e.g. [56], is to select the heading rate $\omega$ instead of steering angle $\delta$. These quantities are related by
+\begin{equation}
+\delta=\arctan(\frac{l\omega}{v_r})
+\end{equation}
+simplifying the heading dynamics to
+\begin{equation}
+\dot{\theta}=\omega, \quad \omega\in [\frac{v_r}{l}\tan(\delta_{\min}, \frac{v_r}{l}\tan(\delta_{\max})]
+\end{equation}
+In this situation, the model is sometimes referred to as the unicycle model since it can be derived by considering the motion of a single wheel. An important variation of this model is the case when $v_r$ is fixed. This is sometimes referred to as the Dubins car, after Lester Dubins who derived the minimum time motion between to points with prescribed tangents [57].Another notable variation is the Reeds-Shepp car for which minimum length paths are known when $v_r$ takes a single forward and reverse speed [58]. These two models have proven to be of some importance to motion planning and will be discussed further in Section IV.
+
+The kinematic models are suitable for planning paths at low speeds (e.g. parking maneuvers and urban driving) where inertial effects are small in comparison to the limitations on mobility imposed by the no-slip assumption. A major drawback of this model is that it permits instantaneous steering angle changes which can be problematic if the motion planning module generates solutions with such instantaneous changes. Continuity of the steering angle can be imposed by augmenting (\ref{eq:vf}), where the steering angle integrates a commanded rate as in [49]. Equation (\ref{eq:vf}) becomes
+\begin{align}
+\begin{split}
+\dot{x}_f&= v_f\cos(\theta),\\
+\dot{y}_f&= v_f\sin(\theta),\\
+\dot{\theta}&=\frac{v_f}{l}\tan(\delta),\\
+\dot{\delta}&=v_{\delta}.
+\end{split}
+\end{align}
+
+In addition to the limit on the steering angle, the steering rate can now be limited: $v_{\delta}\in [\dot{\delta}_{\min},\dot{\delta}_{\max}]$. The same problem can arise with the car’s speed vr and can be resolved in the same way. The drawback to this technique is the increased dimension of the model which can complicate motion planning and control problems. The choice of coordinate system is not limited to using one of the wheel locations as a position coordinate. For models derived using principles from classical mechanics it can be convenient to use the center of mass as the position coordinate as in [59], [60], or the center of oscillation as in [61], [62].
 
 \chapter{外文资料的调研阅读报告或书面翻译}
 
@@ -317,7 +245,3 @@
 除了对导向角的连续性限制，转角变化率也可以引入约束$v_{\delta}\in [\dot{\delta}_{\min},\dot{\delta}_{\max}]$。同样的问题也会出现在速度控制上。可以通过引入加速度保证速度控制的连续性。这种方法的缺点在于增加了模型的维数，将运动计划与控制问题变得更为复杂。
 
 坐标系的选择不限于使用一个车轮位置作为位置坐标。 对于使用经典力学原理得出的模型，可以使用质心作为位置坐标，如[59]，[60]或使用振荡中心，如[61]，[62]。
-
-\chapter{其它附录}
-前面两个附录主要是给本科生做例子。其它附录的内容可以放到这里，当然如果你愿意，可
-以把这部分也放到独立的文件中，然后将其 \cs{input} 到主文件中。

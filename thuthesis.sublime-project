@@ -48,6 +48,7 @@
         "\\usepackage{amssymb}",
         "\\usepackage{upgreek}",
         "\\usepackage{bm}",
+        "\\usepackage{dsfont}",
         "\\IfFileExists{latexsym.sty}{\\usepackage{latexsym}}{}",
         "\\IfFileExists{mathtools.sty}{\\usepackage{mathtools}}{}"
         ],
