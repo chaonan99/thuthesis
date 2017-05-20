@@ -1,5 +1,5 @@
 % !TEX root = ../main.tex
-\chapter{车道汇合群决策模型求解}
+\chapter{车道汇合场景的单车最优控制}
 \label{cha:solve}
 
 在上一章中已经给出了模型的目标函数，并且提到需要对每辆车求解一个控制量输入$u_i(t)$，使得$J(\bm{u})$达到最小。注意到$u_t(t)$实际上是关于时间$t$的函数，$J(\bm{u})$实际上是函数的函数，数学上称为泛函。求泛函的极值需要用到变分法的相关知识。本章先对泛函与变分法进行简要说明，之后运用该方法求解不同情况下泛函的极值，得到决策控制方法。
@@ -130,7 +130,8 @@ H(\bm{x},\bm{u},\bm{\lambda},t)=L(\bm{x},\bm{u},t)+\bm{\lambda}^\mathrm{T}\bm{f}
 与之前的情形相比，该情形多了一个终端条件以确定$t_\mathrm{f}$。
 \end{enumerate}
 
-\section{群决策问题求解}
+\section{最优控制问题求解}
+\label{sec:solve}
 运用上述最优控制的必要条件，可求解本课题的车道汇合群决策模型，获得最优控制策略。下面三小节分别考虑三种情形，其中\ref{ssec:noc}节首先研究控制量和状态量无约束，且终端时间固定的简单情形；\ref{ssec:freetf}节研究控制量和状态量无约束，终端时间自由的情形；\ref{ssec:c}研究控制量和状态量存在约束的情形。
 
 \subsection{无约束情形}
@@ -200,14 +201,36 @@ v(t^\mathrm{m})-v_\mathrm{d}
 \lambda^\mathrm{v}(t^\mathrm{m})=\frac{\partial \bm{g}^\mathrm{T}}{\partial v}\bm{\mu}=\mu^\mathrm{v},\label{eq:freetf:f2}\\
 \left. H+\mu^\mathrm{p}v+\mu^\mathrm{v}u\right|_{t^\mathrm{m}}=0.\label{eq:freetf:f3}
 \end{align}
-将式\ref{eq:freetf:f1},\ref{eq:freetf:f2}及$u=-\lambda^\mathrm{v}$带入式\ref{eq:freetf:f3}，整理得
+将式\ref{eq:freetf:f1}，式\ref{eq:freetf:f2}及$u=-\lambda^\mathrm{v}$代入式\ref{eq:freetf:f3}，整理得
 \begin{equation}
 -\frac32(\lambda^\mathrm{v}(t^\mathrm{m}))^2+2\lambda^\mathrm{p}(t^\mathrm{m})v^\mathrm{m}=0.
 \label{eq:freetf:tf}
 \end{equation}
 其中$v^\mathrm{m}$为末态速度，在当前情形下，$v^\mathrm{m}=v_\mathrm{d}$已经给定。由\ref{eq:freetf:tf}，再结合方程组\ref{eq:noc:array}，即可解出$a,b,c,d,t^\mathrm{m}$。
 
-上述方程组实际上已经是四次方程组，解的情况十分复杂。仿真中发现，大多数数值计算软件包（如{\ttfamily Python}的{\ttfamily sympy}包，{\ttfamily Mathematica}等）在实数解存在的情况下也不能保证找到。因此，实际求解过程中用$t^\mathrm{m}$表示目标函数，并直接求极值来求解$t^\mathrm{m}$。这将在以下章节叙述。
+上述方程组实际上已经是四次方程组，解的情况十分复杂。仿真中发现，大多数数值计算软件包（如{\ttfamily Python}的{\ttfamily sympy}包，{\ttfamily Mathematica}等）在实数解存在的情况下也不能保证找到可行的解。因此，实际求解过程中用$t^\mathrm{m}$表示目标函数，并直接求极值来求解$t^\mathrm{m}$。由式\ref{eq:noc:array}可解得
+\begin{equation}
+\begin{aligned}
+a &= \frac{12t^\mathrm{m} (p_0 - L + t^\mathrm{m}v_0) - 6(t^\mathrm{m})^2(v_0 - v_\mathrm{m})}{(t^\mathrm{m})^4}\\
+b &= -\frac{6(p_0 - L) + 4t^\mathrm{m}v_0 + 2t^\mathrm{m}v_\mathrm{m}}{(t^\mathrm{m})^2}
+\end{aligned}
+\label{eq:abwrttm}
+\end{equation}
+上式中$p_0=p(t^0)$，$v_0=v(t^0)$，$L=p(t^\mathrm{m})$，$v_\mathrm{m}=v(t^\mathrm{m})$。将式\ref{eq:ut}代入目标函数式\ref{eq:one_item_obj}，并求取原函数，可得
+\begin{equation}
+J=\left.\frac12(\frac13a^2t^3+abt^2+b^2t)\right|^{t^\mathrm{m}}_{t^0}
+\label{eq:tmopt}
+\end{equation}
+将式\ref{eq:abwrttm}代入上式，即可将目标函数$J$表示为$t^\mathrm{m}$的函数$J(t^\mathrm{m})$，由此可以通过数值方法确定$J(t^\mathrm{m})$的极值以及取极值时的$t^\mathrm{m}$。
+
+\begin{figure}
+\centering
+\includegraphics[width=10cm]{figures/tm.pdf}
+\caption{$J\sim t_\mathrm{m}$关系曲线}
+\label{fig:tm}
+\end{figure}
+
+图\ref{fig:tm}做出了$p_0=0$，$v_0=\SI{13.4}{m\per s}$，$L=\SI{400}{m}$，$v_\mathrm{m}=\SI{25.0}{m\per s}$条件下的$J\sim t_\mathrm{m}$关系曲线。经实验发现，在正常范围内，$J\sim t_\mathrm{m}$都是形如图\ref{fig:tm}的图线，很容易找到极小值。
 
 \subsection{考虑控制量约束情形}
 \label{ssec:c}
@@ -252,24 +275,53 @@ H(p,v,u,t)=\frac12u^2+\lambda^\mathrm{p}v + \lambda^\mathrm{v}u+\\
 下面根据是否触发约束条件分情况讨论。
 \begin{enumerate}[label=(\arabic*)]
 \item 未触发约束条件。这时哈密尔顿函数退化为\ref{ssec:noc}节所述的情形，因此最优控制为式\ref{eq:ut}。
-\item 触发约束条件，$u(t)=u_{\max}$且$v_{\min}<v(t)<v_{\max}$，此时
+\item 触发约束条件，$u(t)=u_{\max}$且$v_{\min}<v(t)<v_{\max}$。假设在$t=t_1$时，该条件成立，则对于$\forall t>t_1$，
 \begin{gather}
 u^*(t)=u_{\max},\\
 v^*(t)=u_{\max}t+f,\\
 p^*(t)=\frac12u_{\max}t^2+ft+e.
 \end{gather}
-即车辆应按照最大加速度继续运行。
-\item 触发其他约束条件，与上一条同理，应按照约束条件运行。例如某时刻达到了最小速度$v_{\min}$，可以保持最小速度运行。
+即车辆应按照最大加速度继续运行。其中参数$f$和$e$可由车辆在$t=t_1$时刻的位置和速度解出。
+\item 触发约束条件，$u(t)=u_{\max}$且$v(t)=v_{\max}$，假设在$t=t_2>=t_1$时，$v(t)=v_{\max}$成立，则对于$\forall t>t_2$，
+\begin{gather}
+v^*(t)=v_{\max},\\
+p^*(t)=v_{\max}t+q,\\
+u^*(t)=\dot{v}^*(t)=0.
+\end{gather}
+车辆按照最大速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，即
+\begin{gather}
+u^*(t)=gt+h,\label{eq:noc:lo1}\\
+v^*(t)=\frac12gt^2+ht+r,\\
+p^*(t)=\frac16gt^3+\frac12ht^2+rt+s.\label{eq:noc:lo3}
+\end{gather}
+其中参数$g$，$h$，$r$和$s$可仿照式\ref{eq:noc:array}由该段初末状态解出。
+
+\item 触发约束条件，$u(t)=u_{\min}$且$v_{\min}<v(t)<v_{\max}$。假设在$t=t_1$时，该条件成立，则对于$\forall t>t_1$，
+\begin{gather}
+u^*(t)=u_{\max},\\
+v^*(t)=u_{\max}t+f,\\
+p^*(t)=\frac12u_{\max}t^2+ft+e.
+\end{gather}
+即车辆应按照最大加速度减速运行。其中参数$f$和$e$可由车辆在$t=t_1$时刻的位置和速度解出。
+\item 触发约束条件，$u(t)=u_{\min}$且$v(t)=v_{\min}$，假设在$t=t_2>=t_1$时，$v(t)=v_{\min}$成立，则对于$\forall t>t_2$，
+\begin{gather}
+v^*(t)=v_{\max},\\
+p^*(t)=v_{\max}t+q,\\
+u^*(t)=\dot{v}^*(t)=0.
+\end{gather}
+车辆按照最大速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\ref{eq:noc:lo1}---\ref{eq:noc:lo3}给出。
+\item 触发约束条件，$v(t)=v_{\min}$且$u_{\min}<u(t)<u_{\max}$，假设在$t=t_2>=t_1$时，$v(t)=v_{\min}$$u(t)=u_{\min}$，则对于$\forall t>t_2$，
+\begin{gather}
+v^*(t)=v_{\max},\\
+p^*(t)=v_{\max}t+q,\\
+u^*(t)=\dot{v}^*(t)=0.
+\end{gather}
+车辆按照最大速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\ref{eq:noc:lo1}---\ref{eq:noc:lo3}给出。
 \end{enumerate}
 \begin{remark}
-对于以上讨论的触发约束的情况，按照约束值运行可以保证满足最优控制的必要条件。如果在某时刻退出了约束状态，只要后半段控制量为线性形式，仍然可以保证满足必要条件。由此可见，上述最优控制理论只给出了控制量的形式，至于某个控制序列是否为最优控制，还需要其他方式进行判断。
+对于以上讨论的触发约束的情况，按照约束值运行可以保证满足最优控制的必要条件。如果在某时刻退出了约束状态，只要后半段控制量为线性形式，仍然可以保证满足必要条件。由此可见，上述最优控制理论只给出了控制量的形式，至于某个控制序列是否为最优控制，还需要其他方式进行判断。下一章将要讨论的数值解法将会对此问题做出回答。
 % \begin{enumerate}
 % \item $t_i^c < t_{k} + \frac{\delta}{v_k^m}$, 按式(14)，$t_i^{m*}=t_{k} + \frac{\delta}{v_k^m}$；
 % \item 按照式(33)解最优控制发现超速，这时按下界走又会撞前车。此时应该怎样控制？
 % \end{enumerate}
 \end{remark}
-\section{算法可行性分析}
-
-\subsection{时间序列可行性}
-\subsection{控制区不碰撞的证明}
-

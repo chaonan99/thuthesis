@@ -16,6 +16,8 @@
 \usepackage{bm}
 \usepackage{mathtools}
 \usepackage{dsfont}
+\usepackage{siunitx}
+\usepackage{algpseudocode,algorithm,algorithmicx}
 
 % 定义所有的图片文件在 figures 子目录下
 \graphicspath{{figures/}}
@@ -41,13 +43,14 @@
 
 %%% 正文部分
 \mainmatter
-\include{data/chap01}
-\include{data/chap02}
+% \include{data/chap01}
+% \include{data/chap02}
 \include{data/chap_intro}
 \include{data/chap_algorithm}
 \include{data/chap_solve}
+\include{data/chap_num}
 \include{data/chap_easysim}
-
+\include{data/chap_summary}
 
 %%% 其它部分
 
@@ -73,7 +76,8 @@
 
 %% 附录
 \begin{appendix}
-\input{data/appendix01}
+% \input{data/appendix01}
+\input{data/appendix02}
 \end{appendix}
 
 %% 个人简历

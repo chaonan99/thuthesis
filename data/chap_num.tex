@@ -1,0 +1,68 @@
+\chapter{基于最优控制理论的群决策算法}
+在上一章中，文章讨论了如何运用最优控制的相关理论，在不同的约束条件下给出控制量的具体形式。但这些情形只是针对一辆CAV的控制策略。要进行群决策，还需要其他的算法辅助，例如通过路口顺序的决策算法，以及整个系统在状态改变时，一部分车所处的情景可能改变，需要对其重新运行单车的最优控制算法。
+
+\section{通行序列决策}
+前文一直假设已经得到了某种序列$\mathcal{N}(t)$，然后根据该序列迭代的确定达到交汇口时间$t_\mathrm{m}$的下界。这一节讨论如何确定该通行顺序。
+
+关于路口通行顺序的确定，已经有大量的研究工作。这些顺序不仅用于道路交汇口，也用于交叉口（十字路口等）的通行顺序确定。常用的一些顺序有：
+\begin{itemize}
+\item \textbf{先进先出（FIFO）}\ \ 按照进入控制区的时间先后通过路口，先进入的优先通过。文献\cite{Kim2013Collision,Azimi2011Vehicular}中即使用了这种通行顺序进行控制。
+\item \textbf{与路口的距离}\ \ \ 文献\cite{Fankhauser2011Collision}采用了这种顺序。该方案在控制区域不断观测车辆状态，并优先处理离得近的车辆，往往比FIFO效率更高。
+\item \textbf{交通规则}\ \ \ 交通规则对交叉口、交汇口车辆通行有一些规定，也可用于顺序的确定。例如我国交通法规规定，两个同级道路交汇时，车辆应依次交替通过；辅路汇入主路时，应在不影响主路车辆通行的情况下汇入。
+\item \textbf{随机顺序}\ \ \ 文献\cite{Chaloulos2010Distributed}在航线控制的避撞问题中考虑了随机顺序。
+\end{itemize}
+
+除此之外，还有很多文献提出了其他的顺序决策方法。文献\cite{Campos2017Traffic}针对不同车辆具有不同速度和加速度限制的情景，设计了一种\textbf{地平线后退法}，其大致思路是，计算在当前位置，某辆车最快要多久到达路口，并优先对到达较快的车运行后续算法。文献\cite{Baselt2014Merging}在混合交通环境中提出了度量\textbf{公平性}的方法，并通过控制其中有限数量的无人车使累积的不公平程度被限制在一定范围内。其度量方法本质上是基于先进先出策略的。
+
+\subsection{先进先出方案}
+对于本文的场景，最直接的决策方案就是按先进先出的顺序通过路口。该方法的好处在于，算法可以在每辆车进入路口时就确定好控制策略，无意外情况，控制策略无需在中途改变，因为后进入控制区的车辆不会影响之前进入车辆的运行。在先进先出顺序下，本文采用算法\ref{alg:fifo}进行路口车辆的群决策（以下算法仅讨论控制区，交汇区按照期望速度$v_\mathrm{d}$运行即可）。
+
+\begin{algorithm}
+\caption{先进先出顺序下的群决策算法}
+\label{alg:fifo}
+\begin{algorithmic}
+  \Require{仿真时间$t$，仿真步长$\Delta t$}
+  \Statex
+  \While{True}
+    \State 仿真时间 $t\gets t+\Delta t$
+    \If{$t$时刻有车辆进入控制区}
+      \For{$i$ \textbf{in} list(所有进入车辆编号)}
+        \State 对$i$车，按照式\ref{eq:tmcase}确定$t_i^\mathrm{m}$
+        \State 不考虑约束，按照式\ref{eq:noc:array}计算参数$a_i, b_i$
+        \State $i$车最优控制为式\ref{eq:ut}，$i$车按照该控制量运行至交汇区
+      \EndFor
+    \EndIf
+  \EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+该方案用于辅路汇入主路场景时，由于辅路速度较慢，主路车辆为了等待辅路先通行，可能要做出较大减速。为了优化这种顺序，本文提出下面的最优通行时间方案。
+
+\subsection{最优通行时间方案}
+该方案的主要思想是，应该给能够尽快通过路口的车辆更高的优先权。在\ref{sec:solve}节中已经证明，在本文设定的目标函数式\ref{eq:one_item_obj}下，加速度应该是式\ref{eq:ut}所示的线性形式。在线性变化的控制量下，\ref{ssec:freetf}给出了$t_\mathrm{m}$自由时的最优值确定方法。因此，在确定通行时间时，可以先假设所有车$t^\mathrm{m}$均不受限制，分别最小化式\ref{eq:tmopt}获得该车到达交汇区的最优时刻$t^\mathrm{m,opt}$，之后按照这个时间排定通行顺序，使$t^\mathrm{m,opt}$较小的优先通过。这种方案能够解决上一节所述的主路等待辅路的问题。例如主路上某辆车$i$进入控制区的时刻比辅路某车$j$晚$\SI{2}{s}$，但其解出的$t_i^\mathrm{m,opt}$比$t_j^\mathrm{m,opt}$小$\SI{5}{s}$，则$i$车优先通过。
+
+然而，对于上面的例子，在$j$车进入控制区时，系统还不知道有$i$车的存在。当$i$车进入时，$j$车已经根据某种控制函数在控制区运行了，$i$车的进入可能改变$j$车的控制量。
+
+\section{有约束情形的控制策略}
+
+% \begin{algorithm}
+% \caption{最优通行时间顺序下的群决策算法}
+% \begin{algorithmic}[1]
+%   \Require{$x$ and $y$ are packed \DNA strings of equal length $n$}
+%   \Statex
+%   \Function{Distance}{$x, y$}
+%     \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
+%     \Let{$\delta$}{$0$}
+%     \For{$i \gets 1 \textrm{ to } n$}
+%       \If{$z_i \neq 0$}
+%         \Let{$\delta$}{$\delta + 1$}
+%       \EndIf
+%     \EndFor
+%     \State \Return{$\delta$}
+%   \EndFunction
+% \end{algorithmic}
+% \end{algorithm}
+% \section{算法可行性分析}
+
+% \subsection{时间序列可行性}
+% \subsection{控制区不碰撞的证明}
