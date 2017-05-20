@@ -66,7 +66,7 @@ s_i(t)=p_k(t)-p_i(t)\geq \delta, \ \forall t\in [t_i^0, t_i^\mathrm{f}],
 
 在定义优化目标之前，对控制算法做以下假设。
 \begin{assumption}
-进入控制区的车$i$满足约束式\ref{eq:single_constraint}，\ref{eq:colli_rear}。
+进入控制区的车$i$满足约束式\eqref{eq:single_constraint}，式\eqref{eq:colli_rear}。
 \label{ass:restrict}
 \end{assumption}
 \begin{assumption}
@@ -88,7 +88,7 @@ t_i^\mathrm{f}=t_i^\mathrm{m} + \frac{S}{v_\mathrm{d}}.
 \subsection{时间序列的确定}
 \label{ssec:time_series}
 \paragraph{由安全性约束确定界限}
-在假设\ref{ass:smooth}下，考虑到约束式\ref{eq:colli_rear}与式\ref{eq:colli_lateral}，可以由$t_{i-1}^\mathrm{m}$确定$t_i^\mathrm{m}$的下界$(t_i^\mathrm{m})^*$，实际进入交汇区的时间$t_i^\mathrm{m}$应满足$t_i^\mathrm{m} < (t_i^\mathrm{m})^*$。定义以下两个集合，
+在假设\ref{ass:smooth}下，考虑到约束式\eqref{eq:colli_rear}与式\eqref{eq:colli_lateral}，可以由$t_{i-1}^\mathrm{m}$确定$t_i^\mathrm{m}$的下界$(t_i^\mathrm{m})^*$，实际进入交汇区的时间$t_i^\mathrm{m}$应满足$t_i^\mathrm{m} < (t_i^\mathrm{m})^*$。定义以下两个集合，
 \begin{definition}
 定义$\mathcal{L}_i$为与$i$车在同一车道的车编号的集合，$\mathcal{C}_i$为与$i$车在不同车道的车编号的集合。
 \end{definition}
@@ -99,14 +99,14 @@ t_i^\mathrm{f}=t_i^\mathrm{m} + \frac{S}{v_\mathrm{d}}.
 (t_i^\mathrm{m})^*=t_{i-1}^\mathrm{m} + \frac{\delta}{v_\mathrm{d}}
 \label{eq:t_case1}
 \end{equation}
-\item $i-1\in \mathcal{C}_i$，由式\ref{eq:colli_lateral}，当$i-1$车完全驶过交汇区后，$i$车才能进入交汇区。由此可得，
+\item $i-1\in \mathcal{C}_i$，由式\eqref{eq:colli_lateral}，当$i-1$车完全驶过交汇区后，$i$车才能进入交汇区。由此可得，
 \begin{equation}
 (t_i^\mathrm{m})^*=t_{i-1}^\mathrm{m} + \frac{S}{v_\mathrm{d}}
 \label{eq:t_case2}
 \end{equation}
 \end{enumerate}
 
-上述情况二满足了式\ref{eq:colli_lateral}所要求的不同车道不同时出现在交汇区的要求。若交汇区比较长，该要求可以适当放松为，使不同车道间车辆交汇后相距为 $r < S$，$r$为不同车道保证不发生横向碰撞的安全距离。在实际道路条件下，安全距离应随着速度的增加而适当增大。由于交汇区车速仍可视为保持期望速度 $v_\mathrm{d}$，$r$也可以作为常数而预先确定下来。情况二对应的时间关系变为，
+上述情况二满足了式\eqref{eq:colli_lateral}所要求的不同车道不同时出现在交汇区的要求。若交汇区比较长，该要求可以适当放松为，使不同车道间车辆交汇后相距为 $r < S$，$r$为不同车道保证不发生横向碰撞的安全距离。在实际道路条件下，安全距离应随着速度的增加而适当增大。由于交汇区车速仍可视为保持期望速度 $v_\mathrm{d}$，$r$也可以作为常数而预先确定下来。情况二对应的时间关系变为，
 \begin{equation}
 (t_i^\mathrm{m})^*=t_{i-1}^\mathrm{m} + \frac{r}{v_\mathrm{d}}
 \label{eq:t_case2r}
@@ -115,7 +115,7 @@ t_i^\mathrm{f}=t_i^\mathrm{m} + \frac{S}{v_\mathrm{d}}.
 另外，对于不存在前车的第一辆车，其到达交汇区时间 $t_1^\mathrm{m}$可由优化目标解出。这将在下文进一步讨论。
 
 \paragraph{由状态量控制量限制确定界限}
-由于车辆的速度和加速度满足约束式\ref{eq:single_constraint}，某辆车自身具有通过控制区的最短时间。可分以下三种情况：
+由于车辆的速度和加速度满足约束式\eqref{eq:single_constraint}，某辆车自身具有通过控制区的最短时间。可分以下三种情况：
 \begin{enumerate}[label=(\arabic*)]
 \item 车辆以最大加速度运行至最大速度，之后保持最大速度行驶一段时间，再以最大加速度减速至期望速度$v_\mathrm{d}$，恰好在速度减至$v_\mathrm{d}$时到达交汇区，如图\ref{fig:vmax}。
 \begin{figure}[htbp]
@@ -136,7 +136,7 @@ u_{\max}(t_i^\mathrm{m}-t_i^2)=v_{\max}-v_\mathrm{d},\\
 (t_i^\mathrm{m})^* = t_i^0 + \frac{L}{v_{\max}} + \frac{v_{\max}-v_i^0}{u_{\max}} + \frac{(v_i^0-v_\mathrm{d})^2}{2u_{\max}v_{\max}}.
 \label{eq:ts:tm1}
 \end{equation}
-注意在这种情况下未必有$v_i^0 > v_\mathrm{d}$，例如车辆可能直接以最大速度进入控制区，则$t_i^1=t_i^0$，式\ref{eq:ts:tm1}仍然成立。
+注意在这种情况下未必有$v_i^0 > v_\mathrm{d}$，例如车辆可能直接以最大速度进入控制区，则$t_i^1=t_i^0$，式\eqref{eq:ts:tm1}仍然成立。
 
 \item 车辆以最大加速度运行，但未达最大速度即减速，并在速度恰好减至$v_\mathrm{d}$时到达交汇区，如图\ref{fig:vmed}。
 \begin{figure}[htbp]
@@ -183,7 +183,7 @@ t_i^\mathrm{m,2}&=t_i^0+\frac{\sqrt{2(2u_{\max}L+v_0^2+v_\mathrm{d}^2)}-v_0-v_\m
 \end{align}
 \end{theorem}
 
-由式\ref{eq:tmcase}可在进入路口前即确定每辆车$t_i^\mathrm{m}$的下界，若能选择合适的控制策略使车辆恰好在下界时间点到达交汇口，即在某种通过顺序下使旅行时间达到了最优。
+由式\eqref{eq:tmcase}可在进入路口前即确定每辆车$t_i^\mathrm{m}$的下界，若能选择合适的控制策略使车辆恰好在下界时间点到达交汇口，即在某种通过顺序下使旅行时间达到了最优。
 
 \subsection{优化目标建立}
 研究CAV的决策问题，就是在控制量满足一定约束的情况下，对每辆车给出一列控制量输入$u_i(t)$对于车道汇合的场景，一般优化目标包含最小化控制量的输入和最小化平均通行时间。\cite{Rios2016Automated}将二者包含在同一目标函数中，表达为，
@@ -192,8 +192,8 @@ t_i^\mathrm{m,2}&=t_i^0+\frac{\sqrt{2(2u_{\max}L+v_0^2+v_\mathrm{d}^2)}-v_0-v_\m
 &\min_{u_i\in \mathcal{R}_i}\left(w_1\frac12\sum^{N(t)}_{i=1}\int_{t_i^0}^{t_i^\mathrm{f}}C_i\left(u_i\left(t\right)\right)\mathrm{d}t + w_2\sum_{i=2}^{N(t)}|t_i^\mathrm{m}(u_{(1:i)}(t))-t_{i-1}^\mathrm{m}(u_{(1:i-1)}(t))|\right),\\
 &
 \begin{aligned}
-\text{Subject to:} & \quad \mbox{\ref{eq:state}}, \quad \forall i\in \mathcal{N}(t),\\
-& \quad \mbox{\ref{eq:colli_lateral}}, \quad \forall i,j \in \mathcal{N}(t), i\neq j.
+\text{Subject to:} & \quad \mbox{\eqref{eq:state}}, \quad \forall i\in \mathcal{N}(t),\\
+& \quad \mbox{\eqref{eq:colli_lateral}}, \quad \forall i,j \in \mathcal{N}(t), i\neq j.
 \end{aligned}
 \end{aligned}
 \label{eq:two_item_obj}
@@ -211,7 +211,7 @@ t_i^\mathrm{m,2}&=t_i^0+\frac{\sqrt{2(2u_{\max}L+v_0^2+v_\mathrm{d}^2)}-v_0-v_\m
 \end{definition}
 定义\ref{def:possible_u}给出了可能的控制量输入集合。
 
-式\ref{eq:two_item_obj}的第一项表示由控制量输入造成的损失，$C_i(u_i(t))$为控制量输入$u_i(t)$的某种函数。第二项为前后车进入交汇区时间差之和，该值越小，交汇路口吞吐量就越大。对于本文的优化问题，假设所有车辆均按照式\ref{eq:t_case1}，\ref{eq:t_case2}（或\ref{eq:t_case2r}）确定的时间下限通行，则可以略去目标函数式\ref{eq:two_item_obj}中的时间相关项，保留控制量相关项。选取目标为最小化控制量输入的平方\cite{Malikopoulos2016A,Rios2016Automated}，即
+式\eqref{eq:two_item_obj}的第一项表示由控制量输入造成的损失，$C_i(u_i(t))$为控制量输入$u_i(t)$的某种函数。第二项为前后车进入交汇区时间差之和，该值越小，交汇路口吞吐量就越大。对于本文的优化问题，假设所有车辆均按照式\eqref{eq:t_case1}，式\eqref{eq:t_case2}（或式\eqref{eq:t_case2r}）确定的时间下限通行，则可以略去目标函数式\eqref{eq:two_item_obj}中的时间相关项，保留控制量相关项。选取目标为最小化控制量输入的平方\cite{Malikopoulos2016A,Rios2016Automated}，即
 \begin{equation}
 J(\bm{u})=\frac12\int_{t_i^0}^{t_i^\mathrm{m}}u_i^2\mathrm{d}t
 \label{eq:one_item_obj}

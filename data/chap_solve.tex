@@ -97,7 +97,7 @@ H(\bm{x},\bm{u},\bm{\lambda},t)=L(\bm{x},\bm{u},t)+\bm{\lambda}^\mathrm{T}\bm{f}
 \dot{\bm{x}}=\bm{f}(\bm{x},\bm{u},t),\\
 \bm{x}(t_0)=\bm{x}_0.\label{eq:nc:last}
 \end{gather}
-其中式\ref{eq:nc:control}也被称作{\heiti 控制方程}，式\ref{eq:nc:company}也被称作{\heiti 伴随方程}。若退化为拉格朗日问题，则$\theta[t_\mathrm{f},\bm{x}_\mathrm{f}]\equiv 0$，式\ref{eq:nc:company}变为
+其中式\eqref{eq:nc:control}也被称作{\heiti 控制方程}，式\eqref{eq:nc:company}也被称作{\heiti 伴随方程}。若退化为拉格朗日问题，则$\theta[t_\mathrm{f},\bm{x}_\mathrm{f}]\equiv 0$，式\eqref{eq:nc:company}变为
 \begin{equation}
 \bm{\lambda}(t_\mathrm{f})=0.
 \end{equation}
@@ -115,7 +115,7 @@ H(\bm{x},\bm{u},\bm{\lambda},t)=L(\bm{x},\bm{u},t)+\bm{\lambda}^\mathrm{T}\bm{f}
 \dot{\bm{x}}=\bm{f}(\bm{x},\bm{u},t),\\
 \bm{x}(t_0)=\bm{x}_0.\label{eq:cc:last}
 \end{gather}
-其中$\bm{\mu}$为一个待定乘子。对比式\ref{eq:cc:final}与式\ref{eq:nc:final}可知，终端受限情况下，终端条件会发生变化。
+其中$\bm{\mu}$为一个待定乘子。对比式\eqref{eq:cc:final}与式\eqref{eq:nc:final}可知，终端受限情况下，终端条件会发生变化。
 
 \item {\heiti 终端受限，$t_\mathrm{f}$自由的情形}
 \\最优控制的必要条件为
@@ -136,14 +136,14 @@ H(\bm{x},\bm{u},\bm{\lambda},t)=L(\bm{x},\bm{u},t)+\bm{\lambda}^\mathrm{T}\bm{f}
 
 \subsection{无约束情形}
 \label{ssec:noc}
-本节中的无约束是指对每辆CAV均不限制最大加速度和速度。另外，终端时间事先给定。\ref{eq:one_item_obj}在这种情形下，设$t_i^{0}=0$并省略所有下标$i$，最优控制问题的形式为
+本节中的无约束是指对每辆CAV均不限制最大加速度和速度。另外，终端时间事先给定。式\eqref{eq:one_item_obj}在这种情形下，设$t_i^{0}=0$并省略所有下标$i$，最优控制问题的形式为
 \begin{gather}
 \min_{u} J(u)=\int_{0}^{t^\mathrm{m}}L(p,v,u,t)\mathrm{d}t=\int_{0}^{t^\mathrm{m}}\frac12 u^2\mathrm{d}t,\label{eq:noc:first}\\
 p(0)=0, v(0)=v_0,\label{eq:noc:start}\\
 p(t^\mathrm{m})=L, v(t_\mathrm{m})=v_\mathrm{d},\label{eq:noc:end}\\
 \dot{p}=v, \dot{v}=u. \label{eq:noc:last}
 \end{gather}
-其中式\ref{eq:noc:first}为目标函数，式\ref{eq:noc:start}为初始状态，\ref{eq:noc:end}为终端约束，\ref{eq:cc:last}为系统状态方程。该问题是终端受限，$t_\mathrm{f}$给定的最优控制问题，必要条件为式\ref{eq:cc:control} $\sim$ \ref{eq:cc:last}。该问题的哈密尔顿函数为，
+其中式\eqref{eq:noc:first}为目标函数，式\eqref{eq:noc:start}为初始状态，式\eqref{eq:noc:end}为终端约束，式\eqref{eq:cc:last}为系统状态方程。该问题是终端受限，$t_\mathrm{f}$给定的最优控制问题，必要条件为式\eqref{eq:cc:control}---\eqref{eq:cc:last}。该问题的哈密尔顿函数为，
 \begin{equation}
 H(p,v,u,t)=\frac12 u^2+\lambda^\mathrm{p}v + \lambda^\mathrm{v}u.
 \end{equation}
@@ -158,7 +158,7 @@ H(p,v,u,t)=\frac12 u^2+\lambda^\mathrm{p}v + \lambda^\mathrm{v}u.
 \label{eq:uwrtlv}
 \end{equation}
 
-式\ref{eq:dlp}说明$\lambda^\mathrm{p}$为常数，设$\lambda^\mathrm{p}=a$，则可设$\lambda^\mathrm{v}=-(at+b)$，再由\ref{eq:uwrtlv}可得
+式\eqref{eq:dlp}说明$\lambda^\mathrm{p}$为常数，设$\lambda^\mathrm{p}=a$，则可设$\lambda^\mathrm{v}=-(at+b)$，再由式\eqref{eq:uwrtlv}可得
 \begin{equation}
 u^*(t)=at+b,
 \label{eq:ut}
@@ -169,14 +169,18 @@ u^*(t)=at+b,
 v^*(t)=\frac12at^2+bt+c,\\
 p^*(t)=\frac16at^3+\frac12bt^2+ct+d.
 \end{gather}
-以上$a,b,c,d$均为待定常数，可以根据初始条件式\ref{eq:noc:start}和终端条件式\ref{eq:noc:end}得出。可列写如下方程
+以上$a,b,c,d$均为待定常数，可以根据初始条件式\eqref{eq:noc:start}和终端条件式\eqref{eq:noc:end}得出。可列写如下方程
 \begin{equation}
 \begin{bmatrix}
 \frac16t^3 & \frac12t^2 & t & 1 \\
 \frac12t^2 & t & 1 & 0 \\
 \frac16(t^\mathrm{m})^3 & \frac12(t^\mathrm{m})^2 & t^\mathrm{m} & 1 \\
 \frac12(t^\mathrm{m})^2 & t^\mathrm{m} & 1 & 0
-\end{bmatrix} = \begin{bmatrix}
+\end{bmatrix}\cdot
+\begin{bmatrix}
+a\\b\\c\\d
+\end{bmatrix}
+ = \begin{bmatrix}
 p(t)\\v(t)\\p(t^\mathrm{m})\\v(t^\mathrm{m})
 \end{bmatrix}.
 \label{eq:noc:array}
@@ -185,7 +189,7 @@ p(t)\\v(t)\\p(t^\mathrm{m})\\v(t^\mathrm{m})
 
 \subsection{终端时间自由情形}
 \label{ssec:freetf}
-在第\ref{ssec:time_series}节曾提到，对于头一辆车，终端时间是待定的，而后面的车辆可以在预先确定通过顺序的情况下，由前一辆车的通过时间按照式\ref{eq:t_case1}，\ref{eq:t_case2}（或\ref{eq:t_case2r}）确定。头一辆车的优化问题是一个终端受限，$t_\mathrm{f}$自由的最优控制问题，必要条件为式\ref{eq:cn:control} $\sim$ \ref{eq:cn:last}。问题的表述如式\ref{eq:noc:first} $\sim$ \ref{eq:noc:last}。这里将末态约束写为向量函数式
+在第\ref{ssec:time_series}节曾提到，对于头一辆车，终端时间是待定的，而后面的车辆可以在预先确定通过顺序的情况下，由前一辆车的通过时间按照式\eqref{eq:t_case1}，式\eqref{eq:t_case2}（或式\eqref{eq:t_case2r}）确定。头一辆车的优化问题是一个终端受限，$t_\mathrm{f}$自由的最优控制问题，必要条件为式\eqref{eq:cn:control} $\sim$ 式\eqref{eq:cn:last}。问题的表述如式\eqref{eq:noc:first} $\sim$ 式\eqref{eq:noc:last}。这里将末态约束写为向量函数式
 \begin{equation}
 \bm{g}(p(t^\mathrm{m}),v(t^\mathrm{m}),t^\mathrm{m})=
 \begin{bmatrix}
@@ -193,22 +197,22 @@ p(t^\mathrm{m})-L\\
 v(t^\mathrm{m})-v_\mathrm{d}
 \end{bmatrix}.
 \end{equation}
-由伴随方程和控制方程仍可解出$u(t)$为线性形式，如式\ref{eq:ut}。下面需要终端方程来确定$t^\mathrm{m}$。
+由伴随方程和控制方程仍可解出$u(t)$为线性形式，如式\eqref{eq:ut}。下面需要终端方程来确定$t^\mathrm{m}$。
 
-由终端条件式\ref{eq:cn:final}和式\ref{eq:cn:final2}，
+由终端条件式\eqref{eq:cn:final}和式\eqref{eq:cn:final2}，
 \begin{align}
 \lambda^\mathrm{p}(t^\mathrm{m})=\frac{\partial \bm{g}^\mathrm{T}}{\partial p}\bm{\mu}=\mu^\mathrm{p},\label{eq:freetf:f1}\\
 \lambda^\mathrm{v}(t^\mathrm{m})=\frac{\partial \bm{g}^\mathrm{T}}{\partial v}\bm{\mu}=\mu^\mathrm{v},\label{eq:freetf:f2}\\
 \left. H+\mu^\mathrm{p}v+\mu^\mathrm{v}u\right|_{t^\mathrm{m}}=0.\label{eq:freetf:f3}
 \end{align}
-将式\ref{eq:freetf:f1}，式\ref{eq:freetf:f2}及$u=-\lambda^\mathrm{v}$代入式\ref{eq:freetf:f3}，整理得
+将式\eqref{eq:freetf:f1}，式\eqref{eq:freetf:f2}及$u=-\lambda^\mathrm{v}$代入式\eqref{eq:freetf:f3}，整理得
 \begin{equation}
 -\frac32(\lambda^\mathrm{v}(t^\mathrm{m}))^2+2\lambda^\mathrm{p}(t^\mathrm{m})v^\mathrm{m}=0.
 \label{eq:freetf:tf}
 \end{equation}
-其中$v^\mathrm{m}$为末态速度，在当前情形下，$v^\mathrm{m}=v_\mathrm{d}$已经给定。由\ref{eq:freetf:tf}，再结合方程组\ref{eq:noc:array}，即可解出$a,b,c,d,t^\mathrm{m}$。
+其中$v^\mathrm{m}$为末态速度，在当前情形下，$v^\mathrm{m}=v_\mathrm{d}$已经给定。由式\eqref{eq:freetf:tf}，再结合方程组式\eqref{eq:noc:array}，即可解出$a,b,c,d,t^\mathrm{m}$。
 
-上述方程组实际上已经是四次方程组，解的情况十分复杂。仿真中发现，大多数数值计算软件包（如{\ttfamily Python}的{\ttfamily sympy}包，{\ttfamily Mathematica}等）在实数解存在的情况下也不能保证找到可行的解。因此，实际求解过程中用$t^\mathrm{m}$表示目标函数，并直接求极值来求解$t^\mathrm{m}$。由式\ref{eq:noc:array}可解得
+上述方程组实际上已经是四次方程组，解的情况十分复杂。仿真中发现，大多数数值计算软件包（如{\ttfamily Python}的{\ttfamily sympy}包，{\ttfamily Mathematica}等）在实数解存在的情况下也不能保证找到可行的解。因此，实际求解过程中用$t^\mathrm{m}$表示目标函数，并直接求极值来求解$t^\mathrm{m}$。由式\eqref{eq:noc:array}可解得
 \begin{equation}
 \begin{aligned}
 a &= \frac{12t^\mathrm{m} (p_0 - L + t^\mathrm{m}v_0) - 6(t^\mathrm{m})^2(v_0 - v_\mathrm{m})}{(t^\mathrm{m})^4}\\
@@ -216,12 +220,12 @@ b &= -\frac{6(p_0 - L) + 4t^\mathrm{m}v_0 + 2t^\mathrm{m}v_\mathrm{m}}{(t^\mathr
 \end{aligned}
 \label{eq:abwrttm}
 \end{equation}
-上式中$p_0=p(t^0)$，$v_0=v(t^0)$，$L=p(t^\mathrm{m})$，$v_\mathrm{m}=v(t^\mathrm{m})$。将式\ref{eq:ut}代入目标函数式\ref{eq:one_item_obj}，并求取原函数，可得
+上式中$p_0=p(t^0)$，$v_0=v(t^0)$，$L=p(t^\mathrm{m})$，$v_\mathrm{m}=v(t^\mathrm{m})$。将式\eqref{eq:ut}代入目标函数式\eqref{eq:one_item_obj}，并求取原函数，可得
 \begin{equation}
 J=\left.\frac12(\frac13a^2t^3+abt^2+b^2t)\right|^{t^\mathrm{m}}_{t^0}
 \label{eq:tmopt}
 \end{equation}
-将式\ref{eq:abwrttm}代入上式，即可将目标函数$J$表示为$t^\mathrm{m}$的函数$J(t^\mathrm{m})$，由此可以通过数值方法确定$J(t^\mathrm{m})$的极值以及取极值时的$t^\mathrm{m}$。
+将式\eqref{eq:abwrttm}代入上式，即可将目标函数$J$表示为$t^\mathrm{m}$的函数$J(t^\mathrm{m})$，由此可以通过数值方法确定$J(t^\mathrm{m})$的极值以及取极值时的$t^\mathrm{m}$。
 
 \begin{figure}
 \centering
@@ -274,7 +278,7 @@ H(p,v,u,t)=\frac12u^2+\lambda^\mathrm{p}v + \lambda^\mathrm{v}u+\\
 \end{equation}
 下面根据是否触发约束条件分情况讨论。
 \begin{enumerate}[label=(\arabic*)]
-\item 未触发约束条件。这时哈密尔顿函数退化为\ref{ssec:noc}节所述的情形，因此最优控制为式\ref{eq:ut}。
+\item 未触发约束条件。这时哈密尔顿函数退化为\ref{ssec:noc}节所述的情形，因此最优控制为式\eqref{eq:ut}。
 \item 触发约束条件，$u(t)=u_{\max}$且$v_{\min}<v(t)<v_{\max}$。假设在$t=t_1$时，该条件成立，则对于$\forall t>t_1$，
 \begin{gather}
 u^*(t)=u_{\max},\\
@@ -294,7 +298,7 @@ u^*(t)=gt+h,\label{eq:noc:lo1}\\
 v^*(t)=\frac12gt^2+ht+r,\\
 p^*(t)=\frac16gt^3+\frac12ht^2+rt+s.\label{eq:noc:lo3}
 \end{gather}
-其中参数$g$，$h$，$r$和$s$可仿照式\ref{eq:noc:array}由该段初末状态解出。
+其中参数$g$，$h$，$r$和$s$可仿照式\eqref{eq:noc:array}由该段初末状态解出。
 
 \item 触发约束条件，$u(t)=u_{\min}$且$v_{\min}<v(t)<v_{\max}$。假设在$t=t_1$时，该条件成立，则对于$\forall t>t_1$，
 \begin{gather}
@@ -305,18 +309,25 @@ p^*(t)=\frac12u_{\max}t^2+ft+e.
 即车辆应按照最大加速度减速运行。其中参数$f$和$e$可由车辆在$t=t_1$时刻的位置和速度解出。
 \item 触发约束条件，$u(t)=u_{\min}$且$v(t)=v_{\min}$，假设在$t=t_2>=t_1$时，$v(t)=v_{\min}$成立，则对于$\forall t>t_2$，
 \begin{gather}
-v^*(t)=v_{\max},\\
-p^*(t)=v_{\max}t+q,\\
+v^*(t)=v_{\min},\\
+p^*(t)=v_{\min}t+q,\\
 u^*(t)=\dot{v}^*(t)=0.
 \end{gather}
-车辆按照最大速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\ref{eq:noc:lo1}---\ref{eq:noc:lo3}给出。
-\item 触发约束条件，$v(t)=v_{\min}$且$u_{\min}<u(t)<u_{\max}$，假设在$t=t_2>=t_1$时，$v(t)=v_{\min}$$u(t)=u_{\min}$，则对于$\forall t>t_2$，
+车辆按照最小速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\eqref{eq:noc:lo1}---\eqref{eq:noc:lo3}给出。
+\item 触发约束条件，$v(t)=v_{\max}$且$u_{\min}<u(t)<u_{\max}$，假设在$t=t_2>=t_1$时，该条件成立，则对于$\forall t>t_2$，
 \begin{gather}
 v^*(t)=v_{\max},\\
 p^*(t)=v_{\max}t+q,\\
 u^*(t)=\dot{v}^*(t)=0.
 \end{gather}
-车辆按照最大速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\ref{eq:noc:lo1}---\ref{eq:noc:lo3}给出。
+车辆按照最大速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\eqref{eq:noc:lo1}---\eqref{eq:noc:lo3}给出。
+\item 触发约束条件，$v(t)=v_{\min}$且$u_{\min}<u(t)<u_{\max}$，假设在$t=t_2>=t_1$时，该条件成立，则对于$\forall t>t_2$，
+\begin{gather}
+v^*(t)=v_{\min},\\
+p^*(t)=v_{\min}t+q,\\
+u^*(t)=\dot{v}^*(t)=0.
+\end{gather}
+车辆按照最小速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\eqref{eq:noc:lo1}---\eqref{eq:noc:lo3}给出。
 \end{enumerate}
 \begin{remark}
 对于以上讨论的触发约束的情况，按照约束值运行可以保证满足最优控制的必要条件。如果在某时刻退出了约束状态，只要后半段控制量为线性形式，仍然可以保证满足必要条件。由此可见，上述最优控制理论只给出了控制量的形式，至于某个控制序列是否为最优控制，还需要其他方式进行判断。下一章将要讨论的数值解法将会对此问题做出回答。
