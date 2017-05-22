@@ -134,7 +134,7 @@ H(\bm{x},\bm{u},\bm{\lambda},t)=L(\bm{x},\bm{u},t)+\bm{\lambda}^\mathrm{T}\bm{f}
 \label{sec:solve}
 运用上述最优控制的必要条件，可求解本课题的车道汇合群决策模型，获得最优控制策略。下面三小节分别考虑三种情形，其中\ref{ssec:noc}节首先研究控制量和状态量无约束，且终端时间固定的简单情形；\ref{ssec:freetf}节研究控制量和状态量无约束，终端时间自由的情形；\ref{ssec:c}研究控制量和状态量存在约束的情形。
 
-\subsection{无约束情形}
+\subsection{控制系统无约束}
 \label{ssec:noc}
 本节中的无约束是指对每辆CAV均不限制最大加速度和速度。另外，终端时间事先给定。式\eqref{eq:one_item_obj}在这种情形下，设$t_i^{0}=0$并省略所有下标$i$，最优控制问题的形式为
 \begin{gather}
@@ -187,7 +187,7 @@ p(t)\\v(t)\\p(t^\mathrm{m})\\v(t^\mathrm{m})
 \end{equation}
 令$t$为进入控制区的时刻，则可以由初末状态，根据以上方程解出参数。注意，以上方程对每辆CAV都可以单独列写，即每辆车单独计算自己的控制策略。
 
-\subsection{终端时间自由情形}
+\subsection{终端时间自由}
 \label{ssec:freetf}
 在第\ref{ssec:time_series}节曾提到，对于头一辆车，终端时间是待定的，而后面的车辆可以在预先确定通过顺序的情况下，由前一辆车的通过时间按照式\eqref{eq:t_case1}，式\eqref{eq:t_case2}（或式\eqref{eq:t_case2r}）确定。头一辆车的优化问题是一个终端受限，$t_\mathrm{f}$自由的最优控制问题，必要条件为式\eqref{eq:cn:control} $\sim$ 式\eqref{eq:cn:last}。问题的表述如式\eqref{eq:noc:first} $\sim$ 式\eqref{eq:noc:last}。这里将末态约束写为向量函数式
 \begin{equation}
@@ -236,7 +236,7 @@ J=\left.\frac12(\frac13a^2t^3+abt^2+b^2t)\right|^{t^\mathrm{m}}_{t^0}
 
 图\ref{fig:tm}做出了$p_0=0$，$v_0=\SI{13.4}{m\per s}$，$L=\SI{400}{m}$，$v_\mathrm{m}=\SI{25.0}{m\per s}$条件下的$J\sim t_\mathrm{m}$关系曲线。经实验发现，在正常范围内，$J\sim t_\mathrm{m}$都是形如图\ref{fig:tm}的图线，很容易找到极小值。
 
-\subsection{考虑控制量约束情形}
+\subsection{控制系统有约束}
 \label{ssec:c}
 考虑速度、加速度的约束，某辆车的哈密尔顿函数为
 \begin{multline}
@@ -330,7 +330,7 @@ u^*(t)=\dot{v}^*(t)=0.
 车辆按照最小速度运行。其中参数$q$可由$t=t_2$时刻的位置解出。进一步地，如果在$t=t_3$时刻，车辆退出了该情况，即$v_{\min}<v(t)<v_{\max}$，则此时加速度应当重新回到线性形式，最优控制由式\eqref{eq:noc:lo1}---\eqref{eq:noc:lo3}给出。
 \end{enumerate}
 \begin{remark}
-对于以上讨论的触发约束的情况，按照约束值运行可以保证满足最优控制的必要条件。如果在某时刻退出了约束状态，只要后半段控制量为线性形式，仍然可以保证满足必要条件。由此可见，上述最优控制理论只给出了控制量的形式，至于某个控制序列是否为最优控制，还需要其他方式进行判断。下一章将要讨论的数值解法将会对此问题做出回答。
+对于以上讨论的触发约束的情况，按照约束值运行可以保证满足最优控制的必要条件。如果在某时刻退出了约束状态，只要后半段控制量为线性形式，仍然可以保证满足必要条件。由此可见，上述最优控制理论只给出了控制量的形式，至于某个控制序列是否为最优控制，还需要其他方式进行判断。在\ref{sec:cc}节将要给出具体的解的形式，并使用数值解法求解优化问题，给出最优控制。
 % \begin{enumerate}
 % \item $t_i^c < t_{k} + \frac{\delta}{v_k^m}$, 按式(14)，$t_i^{m*}=t_{k} + \frac{\delta}{v_k^m}$；
 % \item 按照式(33)解最优控制发现超速，这时按下界走又会撞前车。此时应该怎样控制？

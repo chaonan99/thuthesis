@@ -1,5 +1,225 @@
-\chapter{基于最优控制理论的群决策算法}
-在上一章中，文章讨论了如何运用最优控制的相关理论，在不同的约束条件下给出控制量的具体形式。但这些情形只是针对一辆CAV的控制策略。要进行群决策，还需要其他的算法辅助，例如通过路口顺序的决策算法，以及整个系统在状态改变时，一部分车所处的情景可能改变，需要对其重新运行单车的最优控制算法。
+\chapter{基于最优控制理论的群决策}
+\label{cha:num}
+在上一章中，文章讨论了如何运用最优控制的相关理论，在不同的约束条件下给出控制量的具体形式。但这些情形只是针对一辆CAV的控制策略。要进行群决策，还需要其他的算法辅助。本章先解决上一章中对单个车辆在有约束情形下的最优控制的求解。最优控制的相关理论对此只能给出必要条件，本章将运用之前得出的结论，将泛函中的优化问题转化为一个较为简单的约束优化问题，该问题可以用一系列数值解法求解。本章还将讨论车辆群体通过路口顺序的决策问题，决定了通行顺序，才真正将单个车辆的优化运用到群决策中。
+
+\section{有约束系统的优化}
+\label{sec:cc}
+在上一章中，\ref{sec:solve}节只给出了控制量需要满足的形式，简单来说，就是在不触发约束条件时按照线性加速度来控制，触发约束条件时按照约束条件定下的的边界来控制。但这个结论并没有给出线性段参数如何计算，何时进入触发条件段，何时退出的具体算法。本节要解决的问题就是，在终端受限，$t^\mathrm{m}$给定，且存在约束的情形下，如何给出具体的最优控制表达式。在有约束的状况下，单车的最优控制将会是一个分段函数。解这个函数最直接的想法是，在可行控制量范围内进行搜索，使目标函数达到最小。而在第\ref{sec:solve}节已经给出了控制量的形式，在该形式的限制下，控制量可由较少的参数来决定，对这些参数进行搜索，即可得出最优控制的表达式。可见，如何利用之前的结论，选取尽可能少的参数来对控制量 $u(t)$进行表示，是问题的关键。
+
+本节中为了避免歧义，用$t_0$表示进入控制区的时间，$t_\mathrm{m}$表示进入交汇区的时间，所有上标均表示次方运算。
+
+\subsection{仅存在速度约束}
+下面先考虑具有速度约束的最优控制求解。解出最优控制的目标是在$t_\mathrm{m}$给定时，给出最优控制，使得速度处于约束范围内。以下只讨论在初始时刻$t_0$开始加速的情况（$u(t_0)\geq 0$），初始为减速的情况与之对称。
+
+首先应确定最优控制具有怎样的形式。假设不存在速度的约束，根据上一章的结论，速度应该是一个二次函数，且最优控制的参数可由式\eqref{eq:noc:array}解得。加上速度的约束后，超出最大速度的部分将被截成一个平台，而两侧仍保持二次函数的形式，并且两侧的加速度斜率应是相同的（这一点以下先不作假设，通过仿真可以验证这个结论）。如果仍然使用原先的参数，到预先给定的$t_\mathrm{m}$时间时，实际的位移应比$L$小，但最优控制下速度的形状应该是相似的。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm]{figures/vc.pdf}
+\caption{速度约束下的速度-时间关系图}
+\label{fig:vc}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm]{figures/vcu.pdf}
+\caption{速度约束下的加速度-时间关系图}
+\label{fig:vcu}
+\end{figure}
+
+基于以上的推断，将整个控制区的控制过程分为三段，分别为二次加速度段，匀速段和二次减速段。如图\ref{fig:vc}为速度与时间的关系图，图\ref{fig:vcu}为加速度与时间的关系图。这里“二次”是指速度为时间的二次函数。其中加速度的分段表达式为，
+\begin{equation}
+u(t)=
+\begin{dcases}
+a_1t+b_1,\quad& t_0\leq t < t_1,\\
+0, \quad& t_1\leq t < t_2,\\
+a_2t+b_2,\quad& t_2\leq t\leq t_\mathrm{m},
+\end{dcases}
+\end{equation}
+其中，
+\begin{gather}
+a_1t+b_1 \geq 0,\quad \forall t\in [t_0,t_1),\label{eq:num:ac1}\\
+a_2t+b_2 \leq 0,\quad \forall t\in [t_2,t_\mathrm{m}],\label{eq:num:ac2}\\
+a_1\leq 0,\ a_2\leq 0.\label{eq:num:ac3}
+\end{gather}
+以上约束中式\eqref{eq:num:ac1}和\eqref{eq:num:ac2}保证了在第一段和第三段中，速度不出现峰值。可以这样考虑：如果在第一段速度出现一个极值后又下降，反而不如保持极值时的速度直接进入匀速段，不仅运行更快，而且省去了减速需要耗费的能量。同理第三段也应该只存在减速，而不能先加速再减速。式\eqref{eq:num:ac3}保证了第一、第三段的速度都是上凸的。可以这样考虑：假设$a_1>0$，可以将第一段加速度沿直线$u=a_1(t_0+t_1)/2+b_1$翻转，如图\ref{fig:uvert}所示。可以观察到二者所夹的面积是相同的，即速度的变化量是相同的。如图\ref{fig:vvert}在速度变化相同的情况下，上凸的速度显然比下凸的位移更多，因此最优控制下的速度一定是上凸的。对$a_2$的分析同理。
+\begin{figure}[htbp]
+\begin{minipage}{0.50\textwidth}
+  \centering
+  \includegraphics[height=8cm,trim={5cm 0 9cm 0},clip]{figures/uvert.pdf}
+  \caption{加速度的翻转}
+  \caption*{\small 实线为原加速度，虚线为翻转后加速度}
+  \caption*{}
+  \label{fig:uvert}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+  \centering
+  \includegraphics[height=8cm,trim={7cm 0 8cm 0},clip]{figures/vvert.pdf}
+  \caption{速度的翻转}
+  \caption*{实线为原加速度对应的速度，虚线为翻转后的加速度对应的速度}
+  \label{fig:vvert}
+\end{minipage}
+\end{figure}
+
+速度的分段表达式为，
+\begin{equation}
+v(t)=
+\begin{dcases}
+\frac12 a_1t^2+b_1t+c_1,\quad& t_0\leq t < t_1,\\
+v_\mathrm{med}, \quad& t_1\leq t < t_2,\\
+\frac12 a_2t^2+b_2t+c_2,\quad& t_2\leq t < t_\mathrm{m},
+\end{dcases}
+\end{equation}
+其中，
+\begin{equation}
+v_\mathrm{d}\leq v_\mathrm{med}\leq v_{\max}.
+\label{eq:num:vc1}
+\end{equation}
+% 可以通过每段的初速$v_0$、末速$v_d$将参数$c_1$，$c_2$用其他参数表示，
+% \begin{align}
+% c_1&=v_0-\frac12a_1t_0^2-b_1t_0,\\
+% c_2&=v_\mathrm{d}-\frac12a_2t_\mathrm{m}^2-b_2t_\mathrm{m}.
+% \end{align}
+
+位移的分段表达式为，
+\begin{equation}
+p(t)=
+\begin{dcases}
+\frac16 a_1t^3+\frac12b_1t^2+c_1t+d_1,\quad& t_0\leq t < t_1,\\
+v_\mathrm{med}(t_2-t_1)+d_\mathrm{med}, \quad& t_1\leq t < t_2,\\
+\frac16 a_2t^3+\frac12b_2t^2+c_2t+d_2,\quad& t_2\leq t < t_\mathrm{m},
+\end{dcases}
+\end{equation}
+
+目标函数仿照\ref{ssec:freetf}节的做法，将$J(u)$用原函数表示，但此时控制量是分段函数，因此$J(u)$也需要分段计算，
+\begin{equation}
+J=\frac12\left[\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right)\right|_{t_0}^{t_1}+\left.\left(\frac13a_2^2t^3+a_2b_2t^2+b_2^2t\right)\right|_{t_2}^{t_\mathrm{m}}\right]
+\label{eq:v_piece_obj}
+\end{equation}
+
+综上，可将最优控制的确定问题转化为如下优化问题，
+\begin{align}
+\min\quad& \quad\eqref{eq:v_piece_obj},\label{eq:num:vopt0}\\
+\text{s.t.}
+\quad & v(t_0)=v_0,\label{eq:num:vopt1}\\
+\quad & v(t_\mathrm{m})=v_\mathrm{m},\\
+\quad & p(t_0)=p_0,\\
+\quad & p(t_\mathrm{m})=L,\label{eq:num:vopt4}\\
+\quad & v(t_1^-)=v(t_1^+),\label{eq:num:vopt5}\\
+\quad & v(t_2^-)=v(t_2^+),\\
+\quad & p(t_1^-)=p(t_1^+),\\
+\quad & p(t_2^-)=p(t_2^+),\label{eq:num:vopt8}\\
+\quad & \eqref{eq:num:ac1},\eqref{eq:num:ac2},\eqref{eq:num:ac3},\eqref{eq:num:vc1}.\label{eq:num:vopt9}
+\end{align}
+其中\eqref{eq:num:vopt1}---\eqref{eq:num:vopt4}为初末状态等式约束，\eqref{eq:num:vopt5}---\eqref{eq:num:vopt8}为速度与位移的连续性约束。对于上述问题，可以使用各种优化方法，如 Nelder-Mead 算法、随机搜索算法、模拟退火算法等。具体算例参见第\ref{cha:exp}章。
+
+\subsection{存在速度与加速度约束}
+按照上一节的思路，如果在速度约束的基础上再加上加速度约束，则超出约束的部分加速度函数图像应该被截为平台。由于加速度是斜率为负的线性函数，可能超出范围的区域只会存在于控制刚开始和将结束的两端。因此，在同时存在加速度和速度约束的情况下，应该将整个控制区分为五部分（这里同样先考虑需要先加速后减速的情况），分别为一次加速段，二次加速段，匀速段，二次减速段和一次减速段。其中“一次”是指速度是线性变化的，亦即加速度为常数。这种分段下速度、加速度的函数图像分别形如图\ref{fig:ucv}和图\ref{fig:ucu}。
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm]{figures/ucv.pdf}
+\caption{速度与加速度约束下的速度-时间关系图}
+\label{fig:ucv}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm]{figures/ucu.pdf}
+\caption{速度与加速度约束下的加速度-时间关系图}
+\label{fig:ucu}
+\end{figure}
+
+加速度的分段表达式为，
+\begin{equation}
+u(t)=
+\begin{dcases}
+u_1,\quad & t_0\leq t<t_1,\\
+a_1t+b_1, & t_1\leq t<t_2,\\
+0, & t_2\leq t<t_3,\\
+a_2t+b_2,& t_3\leq t<t_4,\\
+u_2. & t_4\leq t\leq t_\mathrm{m},\\
+\end{dcases}
+\end{equation}
+其中，
+\begin{equation}
+u_{\max}\geq u_1\geq a_1t_1+b_1\geq a_1t_2+b_1\geq a_2t_3+b_2\geq a_2t_4+b_2\geq u_2\geq u_{\min}
+\label{eq:num:aac}
+\end{equation}
+速度的分段表达式为，
+\begin{equation}
+v(t)=
+\begin{dcases}
+u_1t+c_1,\quad & t_0\leq t<t_1,\\
+\frac12a_1t^2+b_1t+c_2, & t_1\leq t<t_2,\\
+v_\mathrm{med}, & t_2\leq t<t_3,\\
+\frac12a_2t^2+b_2t+c_3,& t_3\leq t<t_4,\\
+u_2t+c_4. & t_4\leq t\leq t_\mathrm{m},\\
+\end{dcases}
+\end{equation}
+其中，
+\begin{equation}
+v_\mathrm{med}\leq v_{\max}.
+\label{eq:num:vvc}
+\end{equation}
+位移的分段表达式为，
+\begin{equation}
+p(t)=
+\begin{dcases}
+\frac12u_1t^2+c_1t+d_1,\quad & t_0\leq t<t_1,\\
+\frac16a_1t^3+\frac12b_1t^2+c_2t+d_2, & t_1\leq t<t_2,\\
+v_\mathrm{med}t+d_3, & t_2\leq t<t_3,\\
+\frac16a_2t^3+\frac12b_2t^2+c_3t+d_4,& t_3\leq t<t_4,\\
+\frac12u_2t^2+c_4t+d_5. & t_4\leq t\leq t_\mathrm{m},\\
+\end{dcases}
+\end{equation}
+目标函数转化为，
+\begin{equation}
+\begin{split}
+J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right)\right|_{t_1}^{t_2}+\right.\\
+\left.\left.\left(\frac13a_2^2t^3+a_2b_2t^2+b_2^2t\right)\right|_{t_3}^{t_4}+u_2^2(t_\mathrm{m}-t_4)\right]
+\end{split}
+\label{eq:a_piece_obj}
+\end{equation}
+待求解优化问题为，
+\begin{align}
+\min \quad& \eqref{eq:a_piece_obj}\quad\label{eq:num:aopt1}\\
+\text{s.t.}
+\quad& v(t_0)=v_0, \quad\\
+\quad& v(t_1^-)=v(t_1^+), \quad\\
+\quad& v(t_2^-)=v(t_2^+), \quad\\
+\quad& v(t_3^-)=v(t_3^+), \quad\\
+\quad& v(t_4^-)=v(t_4^+), \quad\\
+\quad& v(t_\mathrm{m})=v_\mathrm{d}, \quad\\
+\quad& p(t_0)=p_0, \quad\\
+\quad& p(t_1^-)=p(t_1^+), \quad\\
+\quad& p(t_2^-)=p(t_2^+), \quad\\
+\quad& p(t_3^-)=p(t_3^+), \quad\\
+\quad& p(t_4^-)=p(t_4^+), \quad\\
+\quad& p(t_\mathrm{m})=L, \quad\\
+\quad& \eqref{eq:num:aac},\eqref{eq:num:vvc}.\label{eq:num:aoptL}
+\end{align}
+
+同时存在速度和加速度约束时，若直接解上述优化问题，虽然也能进行搜索，但参数太多，搜索难度很大。而实际上，速度约束下的最优控制具有一些良好的性质，在第\ref{cha:exp}章中将通过仿真观察这些性质，并进一步简化最优控制的求解，将其转化为方程组的求解问题。由这些性质进行启发，对本节讨论的问题也可以进一步简化。这将在第\ref{cha:exp}章研究了速度约束问题的求解后再进一步讨论。
+
+% \begin{algorithm}
+% \caption{最优通行时间顺序下的群决策算法}
+% \begin{algorithmic}[1]
+%   \Require{$x$ and $y$ are packed \DNA strings of equal length $n$}
+%   \Statex
+%   \Function{Distance}{$x, y$}
+%     \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
+%     \Let{$\delta$}{$0$}
+%     \For{$i \gets 1 \textrm{ to } n$}
+%       \If{$z_i \neq 0$}
+%         \Let{$\delta$}{$\delta + 1$}
+%       \EndIf
+%     \EndFor
+%     \State \Return{$\delta$}
+%   \EndFunction
+% \end{algorithmic}
+% \end{algorithm}
+% \section{算法可行性分析}
+
+% \subsection{时间序列可行性}
+% \subsection{控制区不碰撞的证明}
 
 \section{通行序列决策}
 前文一直假设已经得到了某种序列$\mathcal{N}(t)$，然后根据该序列迭代的确定达到交汇口时间$t_\mathrm{m}$的下界。这一节讨论如何确定该通行顺序。
@@ -14,10 +234,10 @@
 
 除此之外，还有很多文献提出了其他的顺序决策方法。文献\cite{Campos2017Traffic}针对不同车辆具有不同速度和加速度限制的情景，设计了一种\textbf{地平线后退法}，其大致思路是，计算在当前位置，某辆车最快要多久到达路口，并优先对到达较快的车运行后续算法。文献\cite{Baselt2014Merging}在混合交通环境中提出了度量\textbf{公平性}的方法，并通过控制其中有限数量的无人车使累积的不公平程度被限制在一定范围内。其度量方法本质上是基于先进先出策略的。
 
-\subsection{先进先出方案}
+\subsection{基于先进先出}
 对于本文的场景，最直接的决策方案就是按先进先出的顺序通过路口。该方法的好处在于，算法可以在每辆车进入路口时就确定好控制策略，无意外情况，控制策略无需在中途改变，因为后进入控制区的车辆不会影响之前进入车辆的运行。在先进先出顺序下，本文采用算法\eqref{alg:fifo}进行路口车辆的群决策（以下算法仅讨论控制区，交汇区按照期望速度$v_\mathrm{d}$运行即可）。
 
-\begin{algorithm}
+\begin{algorithm}[htbp]
 \caption{先进先出顺序下的群决策算法}
 \label{alg:fifo}
 \begin{algorithmic}
@@ -38,11 +258,11 @@
 
 该方案用于辅路汇入主路场景时，由于辅路速度较慢，主路车辆为了等待辅路先通行，可能要做出较大减速。为了优化这种顺序，本文提出下面的最优通行时间方案。
 
-\subsection{最优通行时间方案}
+\subsection{基于最优通行时间}
 该方案的主要思想是，应该给能够尽快通过路口的车辆更高的优先权。在\ref{sec:solve}节中已经证明，在本文设定的目标函数式\eqref{eq:one_item_obj}下，加速度应该是式\eqref{eq:ut}所示的线性形式。在线性变化的控制量下，\ref{ssec:freetf}给出了$t_\mathrm{m}$自由时的最优值确定方法。因此，在确定通行时间时，可以先假设所有车$t^\mathrm{m}$均不受限制，分别最小化式\eqref{eq:tmopt}获得该车到达交汇区的最优时刻$t^\mathrm{m,opt}$，之后按照这个时间排定通行顺序，使$t^\mathrm{m,opt}$较小的优先通过。这种方案能够解决上一节所述的主路等待辅路的问题。例如主路上某辆车$i$进入控制区的时刻比辅路某车$j$晚$\SI{2}{s}$，但其解出的$t_i^\mathrm{m,opt}$比$t_j^\mathrm{m,opt}$小$\SI{5}{s}$，则$i$车优先通过。
 
 然而，对于上面的例子，在$j$车进入控制区时，系统还不知道有$i$车的存在。当$i$车进入时，$j$车已经根据某种控制函数在控制区运行了，$i$车的进入可能改变$j$车的控制量。为了处理这种问题，本文提出算法\eqref{alg:otmo}，简记为 OTMO 策略。
-\begin{algorithm}
+\begin{algorithm}[htbp]
 \caption{最优通行时间顺序下的群决策算法（Optimized $t^\mathrm{m}$ Order, OTMO）}
 \label{alg:otmo}
 \begin{algorithmic}
@@ -79,101 +299,3 @@
 \begin{remark}
 算法\eqref{alg:otmo}在有车辆进入控制区时，若对侧车道的控制区域没有车，则不存在排序改变的问题，因为单车道情形下不允许超车。此时$i$车最优控制的确定与算法\eqref{alg:fifo}相同。若对侧车道有车，则需要同对侧车辆从后向前进行比较，并找到第一个$t^\mathrm{m}$比本身小的车，记为$j$，排在其后。对于本车道之前的车和对侧车道$j$车之前的车都不会受到影响，而对侧车道$j$之后的车辆需要重新计算$t^\mathrm{m}$及最优控制的参数。另外，值得注意的是，上述算法中式\eqref{eq:tmopt}的求解需要进行搜索，比较耗时。但实际运行仿真发现，如果直接使用初始状态下计算好的$t^\mathrm{m}$，对顺序没有太大影响，因此也可以只在车辆进入控制区就求解一遍式\eqref{eq:tmopt}并保存结果，作为排序的依据。另一种解决方法是，求解式\eqref{eq:tmopt}所需的参数全部来自车辆本身，不需要其他车辆的参与，因此每辆车可以在合适的时间分别计算各自的最优$t^\mathrm{m}$，到需要排序时直接取用该值。而且由于车辆的状态参数连续变化，搜索也可以在上一个最优点附近进行而迅速收敛。
 \end{remark}
-
-\section{有约束情形的控制策略}
-以上讨论的控制策略均在不存在速度、加速度约束的情形下。若存在约束，第\ref{sec:solve}节只给出了控制量需要满足的形式，简单来说，就是在不触发约束条件时按照线性加速度来控制，触发约束条件时按照约束条件定下的的边界来控制。但这个结论并没有给出线性段参数如何计算，何时进入触发条件段，何时退出的具体算法。本节要解决的问题就是，在终端受限，$t^\mathrm{m}$给定，且存在约束的情形下，如何给出具体的最优控制表达式。在有约束的状况下，单车的最优控制将会是一个分段函数。解这个函数最直接的想法是，在可行控制量范围内进行搜索，使目标函数达到最小。而在第\ref{sec:solve}节已经给出了控制量的形式，在该形式的限制下，控制量可由较少的参数来决定，对这些参数进行搜索，即可得出最优控制的表达式。可见，如何利用之前的结论，选取尽可能少的参数来对控制量 $u(t)$进行表示，是问题的关键。
-
-本节中为了避免歧义，用$t_0$表示进入控制区的时间，$t_\mathrm{m}$表示进入交汇区的时间，所有上标均表示次方运算。
-
-\subsection{仅考虑速度约束}
-下面先考虑具有速度约束的最优控制求解。解出最优控制的目标是在$t_\mathrm{m}$给定时，给出最优控制，使得速度处于约束范围内。以下只讨论在初始时刻$t_0$开始加速的情况（$u(t_0)\geq 0$），初始为减速的情况与之对称。
-
-首先应确定最优控制具有怎样的形式。假设不存在速度的约束，根据上一章的结论，速度应该是一个二次函数，且最优控制的参数可由式\eqref{eq:noc:array}解得。加上速度的约束后，超出最大速度的部分将被截成一个平台，而两侧仍保持二次函数的形式，并且两侧的加速度斜率应是相同的（这一点以下先不作假设，通过仿真可以验证这个结论）。如果仍然使用原先的参数，到预先给定的$t_\mathrm{m}$时间时，实际的位移应比$L$小，但最优控制下速度的形状应该是相似的。
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=12cm]{figures/vc.pdf}
-\caption{速度约束下的速度-时间关系图}
-\label{fig:vc}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=12cm]{figures/vcu.pdf}
-\caption{速度约束下的加速度-时间关系图}
-\label{fig:vcu}
-\end{figure}
-
-基于以上的推断，将整个控制区的控制过程分为三段，分别为二次加速度段，匀速段和二次减速段。如图\ref{fig:vc}为速度与时间的关系图，图\ref{fig:vcu}为加速度与时间的关系图。这里“二次”是指速度为时间的二次函数。其中加速度的分段表达式为，
-\begin{equation}
-u(t)=
-\begin{dcases}
-a_1t+b_1,\quad& t_0\leq t < t_1,\\
-0, \quad& t_1\leq t < t_2,\\
-a_2t+b_2,\quad& t_2\leq t\leq t_\mathrm{m},
-\end{dcases}
-\end{equation}
-其中，
-\begin{gather}
-a_1t+b_1 \geq 0,\quad \forall t\in [t_0,t_1),\label{eq:num:ac1}\\
-a_2t+b_2 \leq 0,\quad \forall t\in [t_2,t_\mathrm{m}],\label{eq:num:ac2}\\
-a_1\leq 0,\ a_2\leq 0.\label{eq:num:ac3}
-\end{gather}
-以上约束中式\eqref{eq:num:ac1}和\eqref{eq:num:ac2}保证了在第一段和第三段中，速度不出现峰值。可以这样考虑：如果在第一段速度出现一个极值后又下降，反而不如保持极值时的速度直接进入匀速段，不仅运行更快，而且省去了减速需要耗费的能量。同理第三段也应该只存在减速，而不能先加速再减速。式\eqref{eq:num:ac3}保证了第一、第三段的速度都是上凸的。可以这样考虑：假设$a_1>0$，可以将第一段加速度沿$u=a_1(t_0+t_1)/2+b_1$翻转，如图\ref{fig:uvert}所示。可以观察到二者所夹的面积是相同的，即速度的变化量是相同的。如图\ref{fig:vvert}在速度变化相同的情况下，上凸的速度显然比下凸的位移更多，因此最优控制下的速度一定是上凸的。对$a_2$的分析同理。
-\begin{figure}[htbp]
-\begin{minipage}{0.50\textwidth}
-  \centering
-  \includegraphics[height=8cm,trim={5cm 0 9cm 0},clip]{figures/uvert.pdf}
-  \caption{加速度的翻转}
-  \caption*{\small 实线为原加速度，虚线为翻转后加速度}
-  \caption*{}
-  \label{fig:uvert}
-\end{minipage}\hfill
-\begin{minipage}{0.45\textwidth}
-  \centering
-  \includegraphics[height=8cm,trim={7cm 0 8cm 0},clip]{figures/vvert.pdf}
-  \caption{速度的翻转}
-  \caption*{实线为原加速度对应的速度，虚线为翻转后的加速度对应的速度}
-  \label{fig:vvert}
-\end{minipage}
-\end{figure}
-
-速度的分段表达式为，
-\begin{equation}
-v(t)=
-\begin{dcases}
-\frac12 a_1t^2+b_1t+c_1,\quad& t_0\leq t < t_1,\\
-v_\mathrm{med}, \quad& t_1\leq t < t_2,\\
-\frac12 a_2t^2+b_2t+c_2,\quad& t_2\leq t < t_\mathrm{m},
-\end{dcases}
-\end{equation}
-其中，
-\begin{equation}
-v_\mathrm{med}\leq v_{\max}.
-\end{equation}
-
-
-\subsection{考虑速度与加速度约束}
-
-
-% \begin{algorithm}
-% \caption{最优通行时间顺序下的群决策算法}
-% \begin{algorithmic}[1]
-%   \Require{$x$ and $y$ are packed \DNA strings of equal length $n$}
-%   \Statex
-%   \Function{Distance}{$x, y$}
-%     \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
-%     \Let{$\delta$}{$0$}
-%     \For{$i \gets 1 \textrm{ to } n$}
-%       \If{$z_i \neq 0$}
-%         \Let{$\delta$}{$\delta + 1$}
-%       \EndIf
-%     \EndFor
-%     \State \Return{$\delta$}
-%   \EndFunction
-% \end{algorithmic}
-% \end{algorithm}
-% \section{算法可行性分析}
-
-% \subsection{时间序列可行性}
-% \subsection{控制区不碰撞的证明}
