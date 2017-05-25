@@ -20,6 +20,16 @@
 \usepackage{algpseudocode,algorithm,algorithmicx}
 \usepackage{numprint}
 \usepackage{xcolor,colortbl}
+\usepackage{enumitem}
+\usepackage[margin=1cm]{caption}
+
+\newcommand*{\citen}[1]{%
+  \begingroup
+    \romannumeral-`\x % remove space at the beginning of \setcitestyle
+    \setcitestyle{numbers}%
+    \cite{#1}%
+  \endgroup
+}
 
 % 定义所有的图片文件在 figures 子目录下
 \graphicspath{{figures/}}
@@ -79,14 +89,23 @@
 
 %% 附录
 \begin{appendix}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+\addtocontents{lof}{\protect\setcounter{tocdepth}{0}}
+\addtocontents{loe}{\protect\setcounter{tocdepth}{0}}
 % \input{data/appendix01}
 \input{data/appendix02}
 \end{appendix}
+
+% \addtocontents{loe}{\protect\setcounter{tocdepth}{2}}
+\addtocontents{lof}{\protect\setcounter{tocdepth}{2}}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
 
 %% 个人简历
 % \include{data/resume}
 
 %% 本科生进行格式审查是需要下面这个表格，答辩可能不需要。选择性留下。
 % 综合论文训练记录表
-\includepdf[pages=-]{scan-record.pdf}
+% \includepdf[pages=-]{defence-info.pdf}
+% \includepdf[pages=-]{scan-record.pdf}
+
 \end{document}

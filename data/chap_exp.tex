@@ -1,14 +1,14 @@
 \chapter{单车最优控制仿真}
 \label{cha:exp}
-在\ref{sec:solve}和\ref{sec:cc}节分别给出了单车在无约束、有约束状况下的最优控制求解方法。本章将给出一些算例，验证方法的正确性。由于无约束最优控制求解比较简单，将其放在有约束问题的求解中一并讨论，并加以比较。
+在\ref{sec:solve}节和\ref{sec:cc}节分别给出了单车在无约束、有约束状况下的最优控制求解方法。本章将给出一些算例，验证方法的正确性。由于无约束最优控制求解比较简单，将其放在有约束问题的求解中一并讨论，并加以比较。
 
 本章的算例使用{\ttfamily Mathematica}进行仿真。与\ref{sec:cc}节的约定相同，本节也使用下标区分变量的含义以避免歧义：$t_0$表示进入控制区的时间，$t_\mathrm{m}$表示进入交汇区的时间。
 
 \section{速度约束下的最优控制}
-速度约束下的最优控制可由式\eqref{eq:num:vopt0}---\eqref{eq:num:vopt9}描述的优化问题给出。
+速度约束下的最优控制可由式\eqref{eq:num:vopt0}--- 式\eqref{eq:num:vopt9}描述的优化问题给出。下面在速度约束较大、速度约束较小两种情况下求解该优化问题，与无约束情况进行对比。同时，根据对仿真结果的观察，进一步总结最优控制应当满足的性质，并根据该性质对问题做进一步的简化。
 
 \subsection{较大速度约束}
-首先考虑速度约束很大，实际最高速度不会超过约束的情形。这种情况下，由式\eqref{eq:num:vopt0}---\eqref{eq:num:vopt9}解出的最优控制应该与式\eqref{eq:noc:array}解出的一致。参数设置如表\ref{tab:vbig:param}所示。
+首先考虑速度约束很大，实际最高速度不会超过约束的情形。这种情况下，由式\eqref{eq:num:vopt0}--- 式\eqref{eq:num:vopt9}解出的最优控制应该与式\eqref{eq:noc:array}解出的一致。参数设置如表\ref{tab:vbig:param}所示。
 \begin{table}[htbp]
 \centering
 \caption{大速度约束仿真实验参数}
@@ -28,7 +28,7 @@ $v_{\max}$ & 速度限制 & $\SI{30.0}{m\per s}$ \\
 \end{tabular}
 \end{table}
 
-在该设定下，直接求解式\ref{eq:noc:array}可得，$a=-0.1248$，$b=2.16$。加速度与速度随时间变化的函数图像分别如图\ref{fig:da}与\ref{fig:dv}。由图可见，最大速度没有超过$v_{\max}=\SI{30.0}{m\per s}$的限制。
+在该设定下，直接求解式\eqref{eq:noc:array}可得，$a=-0.1248$，$b=2.16$。加速度与速度随时间变化的函数图像分别如图\ref{fig:da}与\ref{fig:dv}。由图可见，最大速度没有超过$v_{\max}=\SI{30.0}{m\per s}$的限制。
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=9cm]{figures/vopt/da.pdf}
@@ -42,7 +42,7 @@ $v_{\max}$ & 速度限制 & $\SI{30.0}{m\per s}$ \\
 \label{fig:dv}
 \end{figure}
 
-对于由式\eqref{eq:num:vopt0}---\eqref{eq:num:vopt9}确定的优化问题，使用 Nelder Mead 方法进行搜索，共做10次实验，得到的结果如表\ref{tab:vbig:res}。其中只有第3、9组收敛，第1、5、6、8组均不满足等式约束，第2、4、7、10组是因为数值运算产生了精度损失，导致目标函数接近零，实际不是可行解。
+对于由式\eqref{eq:num:vopt0}--- 式\eqref{eq:num:vopt9}确定的优化问题，使用 Nelder Mead 方法进行搜索，共做10次实验，得到的结果如表\ref{tab:vbig:res}。其中只有第3、9组收敛，第1、5、6、8组均不满足等式约束，第2、4、7、10组是因为数值运算产生了精度损失，导致目标函数接近零，实际不是可行解。
 \begin{table}[htbp]
 \centering
 \caption{大速度约束仿真结果}
@@ -69,7 +69,7 @@ $v_{\max}$ & 速度限制 & $\SI{30.0}{m\per s}$ \\
 \end{tabular}
 \end{table}
 
-由获得的解可以看出，在速度约束不足以制约最优控制时，按照式\eqref{eq:num:vopt0}---\eqref{eq:num:vopt9}得到的解十分接近直接求解\eqref{eq:noc:array}得到的最优控制。作出仿真得到的加速度和速度函数图像，可以观察到与图\ref{fig:da}和图\ref{fig:dv}基本一样。这从一定程度上验证了优化问题（式\eqref{eq:num:vopt0}---\eqref{eq:num:vopt9}）的正确性。
+由获得的解可以看出，在速度约束不足以制约最优控制时，按照式\eqref{eq:num:vopt0}--- 式\eqref{eq:num:vopt9}得到的解十分接近直接求解式\eqref{eq:noc:array}得到的最优控制。作出仿真得到的加速度和速度函数图像，可以观察到与图\ref{fig:da}和图\ref{fig:dv}基本一样。这从一定程度上验证了优化问题（式\eqref{eq:num:vopt0}--- 式\eqref{eq:num:vopt9}）的正确性。
 
 \subsection{较小速度约束}
 在速度约束小的情形下，车辆为了保证在$t_\mathrm{m}$时间运行$L$位移，必须达到最大速度（按照优化问题提出的形式，保持某一小于最大速度的速度值也是可能的）并产生匀速运行段。下面的算例即为这种情况。参数设置如表\ref{tab:vsmall:param}所示。
@@ -92,17 +92,18 @@ $v_{\max}$ & 最大速度限制 & $\SI{30.0}{m\per s}$ \\
 \end{tabular}
 \end{table}
 
-在该设定下，直接求解式\ref{eq:noc:array}可得，$a=-0.2016$，$b=3.12$。加速度与速度随时间变化的函数图像分别如图\ref{fig:na}与\ref{fig:nv}。由图可见，最大速度已经超过了$v_{\max}=\SI{30.0}{m\per s}$的限制。
+在该设定下，直接求解式\eqref{eq:noc:array}可得，$a=-0.2016$，$b=3.12$。加速度与速度随时间变化的函数图像分别如图\ref{fig:na}与\ref{fig:nv}。由图可见，最大速度已经超过了$v_{\max}=\SI{30.0}{m\per s}$的限制。
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=9cm]{figures/vopt/na.pdf}
+\includegraphics[width=8cm]{figures/vopt/na.pdf}
 \caption{加速度理论解（小速度约束实验）}
 \label{fig:na}
 \end{figure}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=9cm]{figures/vopt/nv.pdf}
+\includegraphics[width=8cm]{figures/vopt/nv.pdf}
 \caption{速度理论解（小速度约束实验）}
+\caption*{\small 由图可见，最大速度已经超过了$v_\mathrm{m}=\SI{30}{m\per s}$的限制}
 \label{fig:nv}
 \end{figure}
 
@@ -147,7 +148,8 @@ $v_{\max}$ & 最大速度限制 & $\SI{30.0}{m\per s}$ \\
 \end{figure}
 
 由解得的最优控制可观察到如下特点：
-\begin{enumerate}[label=(\arabic*)]
+\begin{enumerate}[label=(\arabic*), wide=\parindent]
+% \begin{enumerate}
 \item $v_\mathrm{med}=v_{\max}$，即匀速段速度值为最大速度；
 \item $a_1=a_2$，即加速度段和减速段加速度的斜率相同；
 \item $a_1(t_1)=a_2(t_2)=0$，即加速段的结束和减速段的开始时刻加速度均为0，加速度是连续的。
@@ -177,10 +179,11 @@ at+b,\quad & t_0<t<t_0-\frac ba\ \text{ and}\\
 0,\quad & t_0-\frac ab \leq t < t_\mathrm{m}-t_\mathrm{c}-\frac ab.
 \end{dcases}
 \end{equation}
-上式有一组实数解满足$2at_\mathrm{c}+b=0$，这组解在整个变速段加速度不变号，予以排除即可。
+一般情况下，上式有一组实数解在整个变速段加速度不变号，予以排除即可。
 
 另外值得注意的是，上式在一定的参数范围内才适用。考虑两端的极限情况（设$t_0=0$，$p_0=0$）：
-\begin{enumerate}[label=(\arabic*)]
+\begin{enumerate}[label=(\arabic*), wide=\parindent]
+% \begin{enumerate}
 \item 一直以最大速度运行，则有
 \begin{equation}
 v_\mathrm{m}t_\mathrm{m}=L.\\
@@ -192,7 +195,8 @@ v_\mathrm{m}t_\mathrm{m}=L.\\
 -\frac{b^2}{2a}+v_0=v_\mathrm{m}.
 \end{gather}
 \end{enumerate}
-实际计算单个车辆具有速度限制的最优控制时，按照算法\ref{alg:vsin}求解。
+实际计算单个车辆具有速度限制的最优控制时，按照算法\eqref{alg:vsin}求解。另外，若触发的是最小速度限制，则令$v_\mathrm{m}=v_{\min}$即可，其他条件不变。
+
 \begin{algorithm}
 \caption{速度限制下的单车最优控制求解}
 \label{alg:vsin}
@@ -206,7 +210,7 @@ v_\mathrm{m}t_\mathrm{m}=L.\\
     \EndIf
     \State 解\eqref{eq:noc:array}，得到$u_1^*(t),v^*_1(t)$
     \If{$\max_t\{v^*_1(t)\}>v_{\max}$}
-      \State 解\eqref{eq:vopt:1}---\eqref{eq:num:vopt4}，得到$u_2^*(t),v^*_2(t)$
+      \State 解\eqref{eq:vopt:1}--- 式\eqref{eq:num:vopt4}，得到$u_2^*(t),v^*_2(t)$
       \State \Return $u_2^*(t)$
     \Else
       \State \Return $u_1^*(t)$
@@ -216,32 +220,33 @@ v_\mathrm{m}t_\mathrm{m}=L.\\
 \end{algorithm}
 
 \section{速度与加速度约束下的最优控制}
-在速度与加速度约束同时存在时，直接优化式\eqref{eq:num:aopt1}---\eqref{eq:num:aoptL}参数太多，很难得到全局最优。而在上一节中，利用速度约束下最优控制的性质，可以将优化问题进一步简化为方程的求解。将简化的依据总结为引理\ref{lem:1}，
+在速度与加速度约束同时存在时，直接优化式\eqref{eq:num:aopt1}--- 式\eqref{eq:num:aoptL}参数太多，很难得到全局最优。而在上一节中，利用速度约束下最优控制的性质，可以将优化问题进一步简化为方程的求解。将简化的依据总结为引理\ref{lem:1}，
 \begin{lemma}
 速度、加速度受限制的单车最优控制问题中，加速度最优解是连续的，且所有线性段具有相同的斜率。
 \label{lem:1}
 \end{lemma}
+
 引理的证明略。下面利用引理在不同情况下将最优控制问题进一步简化。
 
-\subsection{单边加速度约束的简化问题}
+\subsection{速度与单边加速度约束的简化问题}
 先考虑加速度仅受到最大或最小中某一边的限制。不失一般性，假设受到最大加速度的限制。仿照上一节的做法，将所有线性加速度段合为一段，称为\textbf{变加速段}，其持续时间设为$t_\mathrm{c}$，加速度保持为最大值的一段称为\textbf{匀加速段}，持续时间设为$t_\mathrm{a}$，加速度为零的一段称为\textbf{匀速段}。这里假设三段都存在，不考因某段消失而退化为其他问题的情况。
 
 为了简化方程，对每段分别讨论，设每段的初始时间和位移均为零。匀加速段的加速度、速度和位移为（$0\leq t\leq t_\mathrm{a}$），
 \begin{gather}
-u_\mathrm{a}(t)=u_{\max},\label{eq:amax:ea1}\\
-v_\mathrm{a}(t)=u_{\max}t+v_0,\\
-p_\mathrm{a}(t)=\frac12u_{\max}t^2+v_0t.\label{eq:amax:ea3}
+u_\mathrm{a}(t)=u_\mathrm{m},\label{eq:amax:ea1}\\
+v_\mathrm{a}(t)=u_\mathrm{m}t+v_0,\\
+p_\mathrm{a}(t)=\frac12u_\mathrm{m}t^2+v_0t.\label{eq:amax:ea3}
 \end{gather}
-上式用到了$v_\mathrm{a}(0)=v_0$与$p_\mathrm{a}(0)=0$的条件。变加速段的加速度、速度和位移为（$0\leq t\leq t_\mathrm{c}$），
+其中$u_\mathrm{m}=u_{\max}$。上式用到了$v_\mathrm{a}(0)=v_0$与$p_\mathrm{a}(0)=0$的条件。变加速段的加速度、速度和位移为（$0\leq t\leq t_\mathrm{c}$），
 \begin{gather}
-u_\mathrm{c}(t)=at+u_{\max},\label{eq:amax:ca1}\\
-v_\mathrm{c}(t)=\frac12at^2+u_{\max}t+c,\\
-p_\mathrm{c}(t)=\frac16at^3+\frac12u_{\max}t^2+ct.\label{eq:amax:ca3}
+u_\mathrm{c}(t)=at+u_\mathrm{m},\label{eq:amax:ca1}\\
+v_\mathrm{c}(t)=\frac12at^2+u_\mathrm{m}t+c,\\
+p_\mathrm{c}(t)=\frac16at^3+\frac12u_\mathrm{m}t^2+ct.\label{eq:amax:ca3}
 \end{gather}
-上式用到了匀加速到变加速段连续的条件$u_\mathrm{c}(0)=u_{\max}$与$p_\mathrm{c}(0)=0$。另外根据整体位移量、末速度和速度连续性，可列出如下方程，
+上式用到了匀加速到变加速段连续的条件$u_\mathrm{c}(0)=u_\mathrm{m}$与$p_\mathrm{c}(0)=0$。另外根据整体位移量、末速度和速度连续性，可列出如下方程，
 \begin{gather}
-v_\mathrm{c}(t_\mathrm{c})=\frac12at_\mathrm{c}^2+u_{\max}t_\mathrm{c}+c=v_\mathrm{d},\label{eq:amax:1}\\
-v_\mathrm{c}(-\frac{u_{\max}}{a})=-\frac12\frac{u_{\max}^2}{a}+c=v_\mathrm{max},\\
+v_\mathrm{c}(t_\mathrm{c})=\frac12at_\mathrm{c}^2+u_\mathrm{m}t_\mathrm{c}+c=v_\mathrm{d},\label{eq:amax:1}\\
+v_\mathrm{c}(-\frac{u_\mathrm{m}}{a})=-\frac12\frac{u_\mathrm{m}^2}{a}+c=v_\mathrm{m},\label{eq:amax:2}\\
 p_\mathrm{c}(t_\mathrm{c})+p_\mathrm{a}(t_\mathrm{a})+v_\mathrm{m}\cdot(t_\mathrm{m}-t_\mathrm{c}-t_\mathrm{a})=L,\\
 v_\mathrm{a}(t_\mathrm{a})=v_\mathrm{c}(0).\label{eq:amax:4}
 \end{gather}
@@ -267,46 +272,46 @@ $u_{\max}$ & 最大加速度限制 & $\SI{8}{m\per s\square}$ \\
 \end{tabular}
 \end{table}
 
-下面给出一个具体的例子，仿真参数如表\ref{tab:amax:param}。解式\eqref{eq:amax:1}---\eqref{eq:amax:4}可得两组实数解，分别为：
-\[a = -1.51617,\ c = 8.8942,\ t_\mathrm{a} = -0.138224,\ t_\mathrm{c} = 2.70827\]
+下面给出一个具体的例子，仿真参数如表\ref{tab:amax:param}。解式\eqref{eq:amax:1}--- 式\eqref{eq:amax:4}可得两组实数解，分别为：
+\[a = -1.51617,\ c = 8.8942,\ t_\mathrm{a} = -0.138224,\ t_\mathrm{c} = 2.70827,\]
 和
-\[a = -3.21692,\ c = 20.0526,\ t_\mathrm{a} = 1.25657,\ t_\mathrm{c} = 4.24997\]
+\[a = -3.21692,\ c = 20.0526,\ t_\mathrm{a} = 1.25657,\ t_\mathrm{c} = 4.24997.\]
 其中第一组解$t_\mathrm{a}<0$，舍去。由第二组解确定的加速度与速度图像分别如图\ref{fig:amax:a}和图\ref{fig:amax:v}。经检验，通过的位移确实为$L$。
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=9cm]{figures/uopt/a.pdf}
+\includegraphics[width=8cm]{figures/uopt/a.pdf}
 \caption{最大加速度约束下加速度仿真结果}
 \label{fig:amax:a}
 \end{figure}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=9cm]{figures/uopt/v.pdf}
+\includegraphics[width=8cm]{figures/uopt/v.pdf}
 \caption{最大加速度约束下速度仿真结果}
 \label{fig:amax:v}
 \end{figure}
 
-\subsection{双边加速度约束的简化问题}
-考虑最大、最小加速度（最大减速度）都受限制的情况。与前一节的单边加速度受限情况相比，多出来最后一段以最大减速度减速的\textbf{匀减速段}。其中匀加速段和变加速段的系统状态与控制量仍可设为上一节的形式，分别如式\eqref{eq:amax:ea1}---\eqref{eq:amax:ea3}与式\eqref{eq:amax:ca1}---\eqref{eq:amax:ca3}。匀减速段的加速度、速度和位移设为（$0\leq t\leq t_\mathrm{e}$）
+\subsection{速度与双边加速度约束的简化问题}
+考虑最大、最小加速度（最大减速度）都受限制的情况。与前一节的单边加速度受限情况相比，多出来最后一段以最大减速度减速的\textbf{匀减速段}。其中匀加速段和变加速段的系统状态与控制量仍可设为上一节的形式，分别如式\eqref{eq:amax:ea1}--- 式\eqref{eq:amax:ea3}与式\eqref{eq:amax:ca1}--- 式\eqref{eq:amax:ca3}。匀减速段的加速度、速度和位移设为（$0\leq t\leq t_\mathrm{e}$）
 \begin{gather}
 u_\mathrm{e}(t)=u_{\min},\\
 v_\mathrm{e}(t)=u_{\min}(t-t_\mathrm{e})+v_\mathrm{d},\\
-p_\mathrm{e}(t)=\frac12 u_{\min}t^2+(v_\mathrm{d}-u_{\min}t_\mathrm{e})t.\\
+p_\mathrm{e}(t)=\frac12 u_{\min}t^2+(v_\mathrm{d}-u_{\min}t_\mathrm{e})t.
 \end{gather}
 这里用到了$v_\mathrm{e}(t_e)=v_\mathrm{d}$和$p_\mathrm{e}(0)=0$的条件。根据整体位移量，速度和加速度的连续性可列出方程，
 \begin{gather}
 u_\mathrm{c}(t_\mathrm{c})=u_{\min},\label{eq:amin:1}\\
 v_\mathrm{c}(0)=u_{\max}t_\mathrm{a}+v_0,\\
 v_\mathrm{c}(t_\mathrm{c})=v_\mathrm{d}-u_{\min}t_\mathrm{e},\\
-v_\mathrm{c}(-\frac{u_{\max}}{a})=-\frac12\frac{u_{\max}^2}{a}+c=v_\mathrm{max},\\
+v_\mathrm{c}(-\frac{u_{\max}}{a})=-\frac12\cdot\frac{u_{\max}^2}{a}+c=v_\mathrm{max},\label{eq:amin:4}\\
 p_\mathrm{c}(t_\mathrm{c})+p_\mathrm{a}(t_\mathrm{a})+p_\mathrm{e}(t_\mathrm{e})+v_\mathrm{m}(t_\mathrm{m}-t_\mathrm{e}-t_\mathrm{a}-t_\mathrm{c})=L.\label{eq:amin:5}
 \end{gather}
 上述五个方程构成方程组，可解出五个参数$a,c,t_\mathrm{e},t_\mathrm{a},t_\mathrm{c}$。
 
-对这种情况也给出一个具体算例，仿真参数如表\ref{tab:amin:param}。解方程式\eqref{eq:amin:1}---\eqref{eq:amin:5}，得到如下两组实数解：
-\[a = -5.19134,\ c = 23.8359,\ t_\mathrm{a} = 1.72949,\ t_\mathrm{c} = 2.11891,\ t_\mathrm{e} = 1.37772\]
+对这种情况也给出一个具体算例，仿真参数如表\ref{tab:amin:param}。解方程式\eqref{eq:amin:1}--- 式\eqref{eq:amin:5}，得到如下两组实数解：
+\[a = -5.19134,\ c = 23.8359,\ t_\mathrm{a} = 1.72949,\ t_\mathrm{c} = 2.11891,\ t_\mathrm{e} = 1.37772,\]
 和
-\[a = 5.19134,\ c = 36.1641,\ t_\mathrm{a} = 3.27051,\ t_\mathrm{c} = -2.11891,\ t_\mathrm{e} = 1.95561\]
+\[a = 5.19134,\ c = 36.1641,\ t_\mathrm{a} = 3.27051,\ t_\mathrm{c} = -2.11891,\ t_\mathrm{e} = 1.95561.\]
 其中第二组解$t_\mathrm{c}<0$，舍弃，第一组解确定的加速度和速度分别如图\ref{fig:amin:ma}和图\ref{fig:amin:mv}。经检验，通过的位移确实为$L$。
 \begin{table}[htbp]
 \centering
@@ -342,5 +347,52 @@ $u_{\min}$ & 最大减速度限制 & $-\SI{3}{m\per s\square}$ \\
 \label{fig:amin:mv}
 \end{figure}
 
+\begin{algorithm}
+\caption{加速度和速度限制下的单车最优控制求解}
+\label{alg:asin}
+\begin{algorithmic}
+  \Require{设$t_0=0$，$p_0=0$}
+  \Statex
+  \Function{GetOptimalControl}{$t_\mathrm{m},L,v_0,v_\mathrm{d}$}
+    \If{$t_\mathrm{m} v_{\max}<=L$}
+      \State $t_\mathrm{m}$计算错误
+      \State \Return
+    \EndIf
+    \State 解\eqref{eq:noc:array}，得到$u_1^*(t),v^*_1(t)$
+    \If{$\max_t\{v^*_1(t)\}>v_{\max}$}
+      \State 解\eqref{eq:vopt:1}--- 式\eqref{eq:num:vopt4}，得到$u_2^*(t),v^*_2(t)$
+      \If{$\max_t\{u_2(t)>u_{\max}\}$}
+        \State 解\eqref{eq:amax:1}--- 式\eqref{eq:amax:4}，得到$u_3^*(t),v^*_3(t)$
+        \If{$\min_t\{u_3(t)<u_{\min}\}$}
+          \State 解\eqref{eq:amin:1}--- 式\eqref{eq:amin:5}，得到$u_4^*(t),v^*_4(t)$
+          \State \Return $u_4^*(t)$
+        \Else
+          \State \Return $u_3^*(t)$
+        \EndIf
+      \Else
+        \State \Return $u_2^*(t)$
+      \EndIf
+    \Else
+      \State \Return $u_1^*(t)$
+    \EndIf
+  \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{仅触发加速度约束的简化问题}
+除上述同时触发加速度与速度约束的情况外，还有可能车辆速度约束在整个控制过程中不被触发而仅触发加速度约束，这时变加速段的最大速度关系式不再成立，但匀速段消失，其他各段的时间之和为$t_\mathrm{m}$。因此，与之前的情况相比，触发最大加速度约束时，将式\eqref{eq:amax:2}替换为
+\begin{equation}
+t_\mathrm{m}=t_\mathrm{a}+t_\mathrm{c},
+\end{equation}
+触发双边加速度约束时，将式\eqref{eq:amin:4}替换为
+\begin{equation}
+t_\mathrm{m}=t_\mathrm{a}+t_\mathrm{c}+t_\mathrm{e},
+\end{equation}
+其他方程保持不变，即可求解只触发加速度约束的情况。
+
 \section{总结}
-至此，文章给出了在$t_\mathrm{m}$给定的情况下，存在各种约束时的最优控制求解方法。
+至此，文章给出了在$t_\mathrm{m}$给定的情况下，存在各种约束时的最优控制求解方法。对于实际遇到的具有受限速度和加速度的最优控制求解，可以先按照无约束来解，之后一步步引入速度和两端加速度约束。具体算法参见算法\eqref{alg:asin}。
+
+该算法是算法\eqref{alg:vsin}的拓展，在较简单情况不能满足约束时，转而计算复杂的情况。以上算法只给出了一种解路径，先后触发速度、最大加速度和最小加速度约束。实际运行算法可能不按照该顺序触发，例如先触发最大加速度约束，再触发速度约束。但无论触发的顺序如何，最多只需解四次方程组就可以考虑到各种约束。
+
+另外，有时也可能存在最低限速，这种情况下可以仿照最高限速的处理方法可以对称地列出方程。完整的算法参见代码\footnote{\url{https://github.com/chaonan99/merge_sim}}。另外，此算法没有考虑交通非常拥堵，需要停车等待的情况。这需要对算法进行进一步的扩展，以处理更复杂的因素。

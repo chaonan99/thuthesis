@@ -92,7 +92,7 @@ v_\mathrm{med}(t_2-t_1)+d_\mathrm{med}, \quad& t_1\leq t < t_2,\\
 
 目标函数仿照\ref{ssec:freetf}节的做法，将$J(u)$用原函数表示，但此时控制量是分段函数，因此$J(u)$也需要分段计算，
 \begin{equation}
-J=\frac12\left[\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right)\right|_{t_0}^{t_1}+\left.\left(\frac13a_2^2t^3+a_2b_2t^2+b_2^2t\right)\right|_{t_2}^{t_\mathrm{m}}\right]
+J=\frac12\left[\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right)\right|_{t_0}^{t_1}+\left.\left(\frac13a_2^2t^3+a_2b_2t^2+b_2^2t\right)\right|_{t_2}^{t_\mathrm{m}}\right].
 \label{eq:v_piece_obj}
 \end{equation}
 
@@ -110,19 +110,19 @@ J=\frac12\left[\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right)\right|_{t_0}^
 \quad & p(t_2^-)=p(t_2^+),\label{eq:num:vopt8}\\
 \quad & \eqref{eq:num:ac1},\eqref{eq:num:ac2},\eqref{eq:num:ac3},\eqref{eq:num:vc1}.\label{eq:num:vopt9}
 \end{align}
-其中\eqref{eq:num:vopt1}---\eqref{eq:num:vopt4}为初末状态等式约束，\eqref{eq:num:vopt5}---\eqref{eq:num:vopt8}为速度与位移的连续性约束。对于上述问题，可以使用各种优化方法，如 Nelder-Mead 算法、随机搜索算法、模拟退火算法等。具体算例参见第\ref{cha:exp}章。
+其中\eqref{eq:num:vopt1}--- 式\eqref{eq:num:vopt4}为初末状态等式约束，式\eqref{eq:num:vopt5}--- 式\eqref{eq:num:vopt8}为速度与位移的连续性约束。对于上述问题，可以使用各种优化方法，如 Nelder-Mead 算法、随机搜索算法、模拟退火算法等。具体算例参见第\ref{cha:exp}章。
 
 \subsection{存在速度与加速度约束}
 按照上一节的思路，如果在速度约束的基础上再加上加速度约束，则超出约束的部分加速度函数图像应该被截为平台。由于加速度是斜率为负的线性函数，可能超出范围的区域只会存在于控制刚开始和将结束的两端。因此，在同时存在加速度和速度约束的情况下，应该将整个控制区分为五部分（这里同样先考虑需要先加速后减速的情况），分别为一次加速段，二次加速段，匀速段，二次减速段和一次减速段。其中“一次”是指速度是线性变化的，亦即加速度为常数。这种分段下速度、加速度的函数图像分别形如图\ref{fig:ucv}和图\ref{fig:ucu}。
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=12cm]{figures/ucv.pdf}
+\includegraphics[width=10cm]{figures/ucv.pdf}
 \caption{速度与加速度约束下的速度-时间关系图}
 \label{fig:ucv}
 \end{figure}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=12cm]{figures/ucu.pdf}
+\includegraphics[width=10cm]{figures/ucu.pdf}
 \caption{速度与加速度约束下的加速度-时间关系图}
 \label{fig:ucu}
 \end{figure}
@@ -140,7 +140,14 @@ u_2. & t_4\leq t\leq t_\mathrm{m},\\
 \end{equation}
 其中，
 \begin{equation}
-u_{\max}\geq u_1\geq a_1t_1+b_1\geq a_1t_2+b_1\geq a_2t_3+b_2\geq a_2t_4+b_2\geq u_2\geq u_{\min}
+\begin{split}
+u_{\max}&\geq u_1\\
+&\geq a_1t_1+b_1\\
+&\geq a_1t_2+b_1\\
+&\geq a_2t_3+b_2\\
+&\geq a_2t_4+b_2\\
+&\geq u_2 \geq u_{\min}.
+\end{split}
 \label{eq:num:aac}
 \end{equation}
 速度的分段表达式为，
@@ -174,7 +181,7 @@ v_\mathrm{med}t+d_3, & t_2\leq t<t_3,\\
 \begin{equation}
 \begin{split}
 J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right)\right|_{t_1}^{t_2}+\right.\\
-\left.\left.\left(\frac13a_2^2t^3+a_2b_2t^2+b_2^2t\right)\right|_{t_3}^{t_4}+u_2^2(t_\mathrm{m}-t_4)\right]
+\left.\left.\left(\frac13a_2^2t^3+a_2b_2t^2+b_2^2t\right)\right|_{t_3}^{t_4}+u_2^2(t_\mathrm{m}-t_4)\right].
 \end{split}
 \label{eq:a_piece_obj}
 \end{equation}
@@ -225,14 +232,16 @@ J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right
 前文一直假设已经得到了某种序列$\mathcal{N}(t)$，然后根据该序列迭代的确定达到交汇口时间$t_\mathrm{m}$的下界。这一节讨论如何确定该通行顺序。
 
 关于路口通行顺序的确定，已经有大量的研究工作。这些顺序不仅用于道路交汇口，也用于交叉口（十字路口等）的通行顺序确定。常用的一些顺序有：
-\begin{itemize}
-\item \textbf{先进先出（FIFO）}\ \ 按照进入控制区的时间先后通过路口，先进入的优先通过。文献\cite{Kim2013Collision,Azimi2011Vehicular}中即使用了这种通行顺序进行控制。
-\item \textbf{与路口的距离}\ \ \ 文献\cite{Fankhauser2011Collision}采用了这种顺序。该方案在控制区域不断观测车辆状态，并优先处理离得近的车辆，往往比FIFO效率更高。
-\item \textbf{交通规则}\ \ \ 交通规则对交叉口、交汇口车辆通行有一些规定，也可用于顺序的确定。例如我国交通法规规定，两个同级道路交汇时，车辆应依次交替通过；辅路汇入主路时，应在不影响主路车辆通行的情况下汇入。
-\item \textbf{随机顺序}\ \ \ 文献\cite{Chaloulos2010Distributed}在航线控制的避撞问题中考虑了随机顺序。
-\end{itemize}
 
-除此之外，还有很多文献提出了其他的顺序决策方法。文献\cite{Campos2017Traffic}针对不同车辆具有不同速度和加速度限制的情景，设计了一种\textbf{地平线后退法}，其大致思路是，计算在当前位置，某辆车最快要多久到达路口，并优先对到达较快的车运行后续算法。文献\cite{Baselt2014Merging}在混合交通环境中提出了度量\textbf{公平性}的方法，并通过控制其中有限数量的无人车使累积的不公平程度被限制在一定范围内。其度量方法本质上是基于先进先出策略的。
+\textbf{先进先出（FIFO）}\ \ 按照进入控制区的时间先后通过路口，先进入的优先通过。文献\citen{Kim2013Collision,Azimi2011Vehicular}中即使用了这种通行顺序进行控制。
+
+\textbf{与路口的距离}\ \ \ 文献\citen{Fankhauser2011Collision}采用了这种顺序。该方案在控制区域不断观测车辆状态，并优先处理离得近的车辆，往往比FIFO效率更高。
+
+\textbf{交通规则}\ \ \ 交通规则对交叉口、交汇口车辆通行有一些规定，也可用于顺序的确定。例如我国交通法规规定，两个同级道路交汇时，车辆应依次交替通过；辅路汇入主路时，应在不影响主路车辆通行的情况下汇入。
+
+\textbf{随机顺序}\ \ \ 文献\citen{Chaloulos2010Distributed}在航线控制的避撞问题中考虑了随机顺序。
+
+除此之外，还有很多文献提出了其他的顺序决策方法。文献\citen{Campos2017Traffic}针对不同车辆具有不同速度和加速度限制的情景，设计了一种\textbf{地平线后退法}，其大致思路是，计算在当前位置，某辆车最快要多久到达路口，并优先对到达较快的车运行后续算法。文献\citen{Baselt2014Merging}在混合交通环境中提出了度量\textbf{公平性}的方法，并通过控制其中有限数量的无人车使累积的不公平程度被限制在一定范围内。其度量方法本质上是基于先进先出策略的。
 
 \subsection{基于先进先出}
 对于本文的场景，最直接的决策方案就是按先进先出的顺序通过路口。该方法的好处在于，算法可以在每辆车进入路口时就确定好控制策略，无意外情况，控制策略无需在中途改变，因为后进入控制区的车辆不会影响之前进入车辆的运行。在先进先出顺序下，本文采用算法\eqref{alg:fifo}进行路口车辆的群决策（以下算法仅讨论控制区，交汇区按照期望速度$v_\mathrm{d}$运行即可）。
@@ -261,9 +270,9 @@ J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right
 \subsection{基于最优通行时间}
 该方案的主要思想是，应该给能够尽快通过路口的车辆更高的优先权。在\ref{sec:solve}节中已经证明，在本文设定的目标函数式\eqref{eq:one_item_obj}下，加速度应该是式\eqref{eq:ut}所示的线性形式。在线性变化的控制量下，\ref{ssec:freetf}给出了$t_\mathrm{m}$自由时的最优值确定方法。因此，在确定通行时间时，可以先假设所有车$t^\mathrm{m}$均不受限制，分别最小化式\eqref{eq:tmopt}获得该车到达交汇区的最优时刻$t^\mathrm{m,opt}$，之后按照这个时间排定通行顺序，使$t^\mathrm{m,opt}$较小的优先通过。这种方案能够解决上一节所述的主路等待辅路的问题。例如主路上某辆车$i$进入控制区的时刻比辅路某车$j$晚$\SI{2}{s}$，但其解出的$t_i^\mathrm{m,opt}$比$t_j^\mathrm{m,opt}$小$\SI{5}{s}$，则$i$车优先通过。
 
-然而，对于上面的例子，在$j$车进入控制区时，系统还不知道有$i$车的存在。当$i$车进入时，$j$车已经根据某种控制函数在控制区运行了，$i$车的进入可能改变$j$车的控制量。为了处理这种问题，本文提出算法\eqref{alg:otmo}，简记为 OTMO 策略。
+然而，对于上面的例子，在$j$车进入控制区时，系统还不知道有$i$车的存在。当$i$车进入时，$j$车已经根据某种控制函数在控制区运行了，$i$车的进入可能改变$j$车的控制量。为了处理这种问题，本文提出算法\eqref{alg:otmo}，简记为 OTM （Optimized $t^\mathrm{m}$） 顺序算法。
 \begin{algorithm}[htbp]
-\caption{最优通行时间顺序下的群决策算法（Optimized $t^\mathrm{m}$ Order, OTMO）}
+\caption{最优通行时间顺序下的群决策算法（Optimized $t^\mathrm{m}$, OTM）}
 \label{alg:otmo}
 \begin{algorithmic}
   \Require{仿真时间$t$，仿真步长$\Delta t$}
@@ -280,7 +289,7 @@ J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right
             \If{$t_j^\mathrm{m} <= t_i^\mathrm{m}$}
               \State $i$ 排在$j$之后
               \State 按照式\eqref{eq:tmcase}确定所有标记车辆的$t^\mathrm{m}$
-              \State 对所有标记车辆，按\eqref{eq:noc:array}重新求解最优控制
+              \State 对所有标记车辆，按式\eqref{eq:noc:array}重新求解最优控制
               \State 取消所有标记
               \State \textbf{break}
             \EndIf
