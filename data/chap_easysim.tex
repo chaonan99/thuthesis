@@ -41,7 +41,7 @@ Q=N(t)/t.
 v_\mathrm{ave}(t)=N(t)/\sum_{i=0}^{N(t)}(1/\bar{v}_{i}).
 \end{equation}
 
-\textbf{平均油耗}\ \ 本文使用的油耗计算方法参照文献\citen{Kamal2013Model}，总油耗$\dot{f}_\mathrm{v}$由两部分构成， \ \
+\textbf{平均油耗}\ \ 本文使用的油耗计算方法参照文献\inlinecite{Kamal2013Model}，总油耗$\dot{f}_\mathrm{v}$由两部分构成， \ \
 \begin{equation}
 \dot{f}_\mathrm{v} = \dot{f}_\mathrm{cruise} + \dot{f}_\mathrm{accel},
 \end{equation}
@@ -53,7 +53,7 @@ $\dot{f}_\mathrm{accel}$为加速度带来的油耗，
 \begin{equation}
 \dot{f}_\mathrm{accel}=u(t) \cdot (r_0 + r_1 \cdot v(t) + r_2 · v^2(t) ).
 \end{equation}
-按照\citen{Kamal2013Model}给出的参数，系数如表\ref{tab:fuel:param}。上述公式给出的是单位时间的油耗，仿真中按照时间间隔每步计算油耗，对每辆车取平均后，再对所有车的油耗取平均即得整个系统的平均油耗，下文用$\bar{F}$表示系统的平均油耗。
+按照\inlinecite{Kamal2013Model}给出的参数，系数如表\ref{tab:fuel:param}。上述公式给出的是单位时间的油耗，仿真中按照时间间隔每步计算油耗，对每辆车取平均后，再对所有车的油耗取平均即得整个系统的平均油耗，下文用$\bar{F}$表示系统的平均油耗。
 \begin{table}[htbp]
 \centering
 \caption{油耗公式系数表}
@@ -98,13 +98,15 @@ $t_3^0, t_4^0$ & 三、四号车进入路口时刻 & $\SI{15.0}{s}$ \\
 \begin{minipage}{0.48\textwidth}
   \centering
   \includegraphics[height=6cm]{figures/sim_case1/posi.pdf}
-  \caption{位移-时间关系图（第一组）}
+  \caption{位移-时间关系图}
+  \caption*{\small （第一组）}
   \label{fig:case1:posi}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
   \includegraphics[height=6cm]{figures/sim_case1/speed.pdf}
-  \caption{速度-时间关系图（第一组）}
+  \caption{速度-时间关系图}
+  \caption*{\small （第一组）}
   \label{fig:case1:speed}
 \end{minipage}
 \end{figure}
@@ -112,13 +114,15 @@ $t_3^0, t_4^0$ & 三、四号车进入路口时刻 & $\SI{15.0}{s}$ \\
 \begin{minipage}{0.48\textwidth}
   \centering
   \includegraphics[height=6cm]{figures/sim_case1/acc.pdf}
-  \caption{加速度-时间关系图（第一组）}
+  \caption{加速度-时间关系图}
+  \caption*{\small （第一组）}
   \label{fig:case1:acc}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
   \includegraphics[height=6cm]{figures/sim_case1/fuel.pdf}
-  \caption{油耗-时间关系图（第一组）}
+  \caption{油耗-时间关系图}
+  \caption*{\small （第一组）}
   \label{fig:case1:fuel}
 \end{minipage}
 \end{figure}
@@ -152,28 +156,32 @@ $v_\mathrm{d}$ & 期望速度 & $\SI{25.0}{m\per s}$ \\
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=5.6cm]{figures/sim_case2/posi.pdf}
-  \caption{位移-时间关系图（第二组）}
+  \includegraphics[height=5.4cm]{figures/sim_case2/posi.pdf}
+  \caption{位移-时间关系图}
+  \caption*{\small （第二组）}
   \label{fig:case2:posi}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=5.6cm]{figures/sim_case2/speed.pdf}
-  \caption{速度-时间关系图（第二组）}
+  \includegraphics[height=5.4cm]{figures/sim_case2/speed.pdf}
+  \caption{速度-时间关系图}
+  \caption*{\small （第二组）}
   \label{fig:case2:speed}
 \end{minipage}
 \end{figure}
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=5.6cm]{figures/sim_case2/acc.pdf}
-  \caption{加速度-时间关系图（第二组）}
+  \includegraphics[height=5.4cm]{figures/sim_case2/acc.pdf}
+  \caption{加速度-时间关系图}
+  \caption*{\small （第二组）}
   \label{fig:case2:acc}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=5.6cm]{figures/sim_case2/fuel.pdf}
-  \caption{油耗-时间关系图（第二组）}
+  \includegraphics[height=5.4cm]{figures/sim_case2/fuel.pdf}
+  \caption{油耗-时间关系图}
+  \caption*{\small （第二组）}
   \label{fig:case2:fuel}
 \end{minipage}
 \end{figure}
@@ -187,28 +195,32 @@ $v_\mathrm{d}$ & 期望速度 & $\SI{25.0}{m\per s}$ \\
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case3/posi.pdf}
-  \caption{位移-时间关系图（硬变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case3/posi.pdf}
+  \caption{位移-时间关系图}
+  \caption*{\small （硬变化）}
   \label{fig:case3:posi}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case3/speed.pdf}
-  \caption{速度-时间关系图（硬变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case3/speed.pdf}
+  \caption{速度-时间关系图}
+  \caption*{\small （硬变化）}
   \label{fig:case3:speed}
 \end{minipage}
 \end{figure}
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case3/acc.pdf}
-  \caption{加速度-时间关系图（硬变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case3/acc.pdf}
+  \caption{加速度-时间关系图}
+  \caption*{\small （硬变化）}
   \label{fig:case3:acc}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case3/fuel.pdf}
-  \caption{油耗-时间关系图（硬变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case3/fuel.pdf}
+  \caption{油耗-时间关系图}
+  \caption*{\small （硬变化）}
   \label{fig:case3:fuel}
 \end{minipage}
 \end{figure}
@@ -219,28 +231,32 @@ $v_\mathrm{d}$ & 期望速度 & $\SI{25.0}{m\per s}$ \\
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case4/posi.pdf}
-  \caption{位移-时间关系图（软变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case4/posi.pdf}
+  \caption{位移-时间关系图}
+  \caption*{\small （软变化）}
   \label{fig:case4:posi}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case4/speed.pdf}
-  \caption{速度-时间关系图（软变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case4/speed.pdf}
+  \caption{速度-时间关系图}
+  \caption*{\small （软变化）}
   \label{fig:case4:speed}
 \end{minipage}
 \end{figure}
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case4/acc.pdf}
-  \caption{加速度-时间关系图（软变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case4/acc.pdf}
+  \caption{加速度-时间关系图}
+  \caption*{\small （软变化）}
   \label{fig:case4:acc}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[height=6cm]{figures/sim_case4/fuel.pdf}
-  \caption{油耗-时间关系图（软变化）}
+  \includegraphics[height=5.4cm]{figures/sim_case4/fuel.pdf}
+  \caption{油耗-时间关系图}
+  \caption*{\small （软变化）}
   \label{fig:case4:fuel}
 \end{minipage}
 \end{figure}
@@ -254,10 +270,10 @@ $v_\mathrm{d}$ & 期望速度 & $\SI{25.0}{m\per s}$ \\
 \toprule[1.5pt]
 \diagbox[width=10em]{评价指标}{仿真算法} & FIFO & OTM(Hard) & OTM(Soft) \\
 \midrule[1pt]
-$\bar{T}$（$\si{s}$）  & 19.76 & 16.08 & 18.63 \\
-$Q$（$\si{ve\per s}$）  & 0.4663 & 0.5236 & 0.4616 \\
-$v_\mathrm{ave}$（$\si{km\per h}$）  & 78.403 & 96.265 & 83.139 \\
-$\bar{F}$（$\si{ml\per ve}$） & 8.3242 & 15.8812 & 9.2989 \\
+$\quad \bar{T}$（$\si{s}$）  & 19.76 & 16.08 & 18.63 \\
+$\quad Q$（$\si{ve\per s}$）  & 0.4663 & 0.5236 & 0.4616 \\
+$\quad v_\mathrm{ave}$（$\si{km\per h}$）  & 78.403 & 96.265 & 83.139 \\
+$\quad \bar{F}$（$\si{ml\per ve}$） & 8.3242 & 15.8812 & 9.2989 \\
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}

@@ -206,25 +206,6 @@ J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right
 
 同时存在速度和加速度约束时，若直接解上述优化问题，虽然也能进行搜索，但参数太多，搜索难度很大。而实际上，速度约束下的最优控制具有一些良好的性质，在第\ref{cha:exp}章中将通过仿真观察这些性质，并进一步简化最优控制的求解，将其转化为方程组的求解问题。由这些性质进行启发，对本节讨论的问题也可以进一步简化。这将在第\ref{cha:exp}章研究了速度约束问题的求解后再进一步讨论。
 
-% \begin{algorithm}
-% \caption{最优通行时间顺序下的群决策算法}
-% \begin{algorithmic}[1]
-%   \Require{$x$ and $y$ are packed \DNA strings of equal length $n$}
-%   \Statex
-%   \Function{Distance}{$x, y$}
-%     \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
-%     \Let{$\delta$}{$0$}
-%     \For{$i \gets 1 \textrm{ to } n$}
-%       \If{$z_i \neq 0$}
-%         \Let{$\delta$}{$\delta + 1$}
-%       \EndIf
-%     \EndFor
-%     \State \Return{$\delta$}
-%   \EndFunction
-% \end{algorithmic}
-% \end{algorithm}
-% \section{算法可行性分析}
-
 % \subsection{时间序列可行性}
 % \subsection{控制区不碰撞的证明}
 
@@ -233,20 +214,21 @@ J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right
 
 关于路口通行顺序的确定，已经有大量的研究工作。这些顺序不仅用于道路交汇口，也用于交叉口（十字路口等）的通行顺序确定。常用的一些顺序有：
 
-\textbf{先进先出（FIFO）}\ \ 按照进入控制区的时间先后通过路口，先进入的优先通过。文献\citen{Kim2013Collision,Azimi2011Vehicular}中即使用了这种通行顺序进行控制。
+\textbf{先进先出（FIFO）}\ \ 按照进入控制区的时间先后通过路口，先进入的优先通过。文献\inlinecite{Kim2013Collision,Azimi2011Vehicular}中即使用了这种通行顺序进行控制。
 
-\textbf{与路口的距离}\ \ \ 文献\citen{Fankhauser2011Collision}采用了这种顺序。该方案在控制区域不断观测车辆状态，并优先处理离得近的车辆，往往比FIFO效率更高。
+\textbf{与路口的距离}\ \ \ 文献\inlinecite{Fankhauser2011Collision}采用了这种顺序。该方案在控制区域不断观测车辆状态，并优先处理离得近的车辆，往往比FIFO效率更高。
 
 \textbf{交通规则}\ \ \ 交通规则对交叉口、交汇口车辆通行有一些规定，也可用于顺序的确定。例如我国交通法规规定，两个同级道路交汇时，车辆应依次交替通过；辅路汇入主路时，应在不影响主路车辆通行的情况下汇入。
 
-\textbf{随机顺序}\ \ \ 文献\citen{Chaloulos2010Distributed}在航线控制的避撞问题中考虑了随机顺序。
+\textbf{随机顺序}\ \ \ 文献\inlinecite{Chaloulos2010Distributed}在航线控制的避撞问题中考虑了随机顺序。
 
-除此之外，还有很多文献提出了其他的顺序决策方法。文献\citen{Campos2017Traffic}针对不同车辆具有不同速度和加速度限制的情景，设计了一种\textbf{地平线后退法}，其大致思路是，计算在当前位置，某辆车最快要多久到达路口，并优先对到达较快的车运行后续算法。文献\citen{Baselt2014Merging}在混合交通环境中提出了度量\textbf{公平性}的方法，并通过控制其中有限数量的无人车使累积的不公平程度被限制在一定范围内。其度量方法本质上是基于先进先出策略的。
+除此之外，还有很多文献提出了其他的顺序决策方法。文献\inlinecite{Campos2017Traffic}针对不同车辆具有不同速度和加速度限制的情景，设计了一种\textbf{地平线后退法}，其大致思路是，计算在当前位置，某辆车最快要多久到达路口，并优先对到达较快的车运行后续算法。文献\inlinecite{Baselt2014Merging}在混合交通环境中提出了度量\textbf{公平性}的方法，并通过控制其中有限数量的智能车使累积的不公平程度被限制在一定范围内。其度量方法本质上是基于先进先出策略的。
 
 \subsection{基于先进先出}
 对于本文的场景，最直接的决策方案就是按先进先出的顺序通过路口。该方法的好处在于，算法可以在每辆车进入路口时就确定好控制策略，无意外情况，控制策略无需在中途改变，因为后进入控制区的车辆不会影响之前进入车辆的运行。在先进先出顺序下，本文采用算法\eqref{alg:fifo}进行路口车辆的群决策（以下算法仅讨论控制区，交汇区按照期望速度$v_\mathrm{d}$运行即可）。
 
 \begin{algorithm}[htbp]
+\small
 \caption{先进先出顺序下的群决策算法}
 \label{alg:fifo}
 \begin{algorithmic}
@@ -270,8 +252,8 @@ J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right
 \subsection{基于最优通行时间}
 该方案的主要思想是，应该给能够尽快通过路口的车辆更高的优先权。在\ref{sec:solve}节中已经证明，在本文设定的目标函数式\eqref{eq:one_item_obj}下，加速度应该是式\eqref{eq:ut}所示的线性形式。在线性变化的控制量下，\ref{ssec:freetf}给出了$t_\mathrm{m}$自由时的最优值确定方法。因此，在确定通行时间时，可以先假设所有车$t^\mathrm{m}$均不受限制，分别最小化式\eqref{eq:tmopt}获得该车到达交汇区的最优时刻$t^\mathrm{m,opt}$，之后按照这个时间排定通行顺序，使$t^\mathrm{m,opt}$较小的优先通过。这种方案能够解决上一节所述的主路等待辅路的问题。例如主路上某辆车$i$进入控制区的时刻比辅路某车$j$晚$\SI{2}{s}$，但其解出的$t_i^\mathrm{m,opt}$比$t_j^\mathrm{m,opt}$小$\SI{5}{s}$，则$i$车优先通过。
 
-然而，对于上面的例子，在$j$车进入控制区时，系统还不知道有$i$车的存在。当$i$车进入时，$j$车已经根据某种控制函数在控制区运行了，$i$车的进入可能改变$j$车的控制量。为了处理这种问题，本文提出算法\eqref{alg:otmo}，简记为 OTM （Optimized $t^\mathrm{m}$） 顺序算法。
 \begin{algorithm}[htbp]
+\small
 \caption{最优通行时间顺序下的群决策算法（Optimized $t^\mathrm{m}$, OTM）}
 \label{alg:otmo}
 \begin{algorithmic}
@@ -304,6 +286,8 @@ J=\frac12\left[u_1^2(t_1-t_0)+\left.\left(\frac13a_1^2t^3+a_1b_1t^2+b_1^2t\right
   \EndWhile
 \end{algorithmic}
 \end{algorithm}
+
+然而，对于上面的例子，在$j$车进入控制区时，系统还不知道有$i$车的存在。当$i$车进入时，$j$车已经根据某种控制函数在控制区运行了，$i$车的进入可能改变$j$车的控制量。为了处理这种问题，本文提出算法\eqref{alg:otmo}，简记为 OTM （Optimized $t^\mathrm{m}$） 顺序算法。
 
 \begin{remark}
 算法\eqref{alg:otmo}在有车辆进入控制区时，若对侧车道的控制区域没有车，则不存在排序改变的问题，因为单车道情形下不允许超车。此时$i$车最优控制的确定与算法\eqref{alg:fifo}相同。若对侧车道有车，则需要同对侧车辆从后向前进行比较，并找到第一个$t^\mathrm{m}$比本身小的车，记为$j$，排在其后。对于本车道之前的车和对侧车道$j$车之前的车都不会受到影响，而对侧车道$j$之后的车辆需要重新计算$t^\mathrm{m}$及最优控制的参数。另外，值得注意的是，上述算法中式\eqref{eq:tmopt}的求解需要进行搜索，比较耗时。但实际运行仿真发现，如果直接使用初始状态下计算好的$t^\mathrm{m}$，对顺序没有太大影响，因此也可以只在车辆进入控制区就求解一遍式\eqref{eq:tmopt}并保存结果，作为排序的依据。另一种解决方法是，求解式\eqref{eq:tmopt}所需的参数全部来自车辆本身，不需要其他车辆的参与，因此每辆车可以在合适的时间分别计算各自的最优$t^\mathrm{m}$，到需要排序时直接取用该值。而且由于车辆的状态参数连续变化，搜索也可以在上一个最优点附近进行而迅速收敛。
