@@ -1,56 +1,57 @@
 {
-    "folders":
-    [
-        {
-            "file_exclude_patterns":
-            [
-                ".Rhistory",
-                "*.html",
-                "*.aux",
-                "*.pdf",
-                "*.out",
-                "*.synctex*",
-                "*.toc",
-                "*.log",
-                "*.bbl",
-                "*.blg",
-                "*.loe",
-                "*.lof",
-                "*.lot",
-                "*.xdv",
-                "*.fls",
-                "*.fdb_latexmk",
-                "*.glo",
-                "*.hd",
-                "*.dtx",
-                // "*.bst",
-                "*.gls",
-                // "*.cfg",
-                "*.ins",
-                "*.js",
-                "*.sty",
-                // "*.cls",
-                "*.thm",
-                "latexmkrc",
-            ],
-            "path": "."
-        }
-    ],
-    "settings":
-    {
-        "texpath":["$PATH;.\\ref"],
-        "TEXroot": "main.tex",
-        "preview_math_template_packages": [
-        "\\usepackage{amsmath}",
-        "\\usepackage{siunitx}",
-        "\\usepackage{amsfonts}",
-        "\\usepackage{mathtools}",
-        "\\usepackage{amssymb}",
-        "\\usepackage{upgreek}",
-        "\\usepackage{bm}",
-        "\\usepackage{dsfont}",
-        "\\IfFileExists{latexsym.sty}{\\usepackage{latexsym}}{}",
-        "\\IfFileExists{mathtools.sty}{\\usepackage{mathtools}}{}"
-        ],
-    }
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				".Rhistory",
+				"*.html",
+				"*.aux",
+				"*.pdf",
+				"*.out",
+				"*.synctex*",
+				"*.toc",
+				"*.log",
+				"*.bbl",
+				"*.blg",
+				"*.loe",
+				"*.lof",
+				"*.lot",
+				"*.xdv",
+				"*.fls",
+				"*.fdb_latexmk",
+				"*.glo",
+				"*.hd",
+				"*.dtx",
+				"*.gls",
+				"*.ins",
+				"*.js",
+				"*.sty",
+				"*.thm",
+				"latexmkrc"
+			],
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"TEXroot": "main.tex",
+		"preview_math_template_packages":
+		[
+			"\\usepackage{amsmath}",
+			"\\usepackage{siunitx}",
+			"\\usepackage{amsfonts}",
+			"\\usepackage{mathtools}",
+			"\\usepackage{amssymb}",
+			"\\usepackage{upgreek}",
+			"\\usepackage{bm}",
+			"\\usepackage{dsfont}",
+			"\\IfFileExists{latexsym.sty}{\\usepackage{latexsym}}{}",
+			"\\IfFileExists{mathtools.sty}{\\usepackage{mathtools}}{}"
+		],
+		"texpath":
+		[
+			"$PATH;.\\ref"
+		]
+	}
 }
